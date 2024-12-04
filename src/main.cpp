@@ -1,6 +1,8 @@
 #include "main.h"
 #include <iostream>
 
+
+//new stuff
 int color_stop = 0;
 //Motor Definitions
 pros::adi::DigitalOut clench('A');
