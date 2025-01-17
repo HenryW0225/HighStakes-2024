@@ -3,18 +3,18 @@
 
 
 //new stuff
-int color_stop = 0;
+//int color_stop = 0;
 //Motor Definitions
 pros::adi::DigitalOut clench('A');
-pros::adi::DigitalOut climb('C');
+pros::adi::DigitalOut climb('F');
 pros::adi::DigitalOut doinker('B');
-pros::Motor left_front_mtr(-16, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-pros::Motor left_middle_mtr(-15, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-pros::Motor left_back_mtr(-19, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-pros::Motor right_front_mtr(1, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-pros::Motor right_middle_mtr(6, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-pros::Motor right_back_mtr(18, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-//pros::Motor intake_mtr(-17, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+pros::Motor left_front_mtr(-5, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+pros::Motor left_middle_mtr(-10, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+pros::Motor left_back_mtr(-4, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+pros::Motor right_front_mtr(20, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+pros::Motor right_middle_mtr(2, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+pros::Motor right_back_mtr(6, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+//pros::Motor intake_mtr(-7, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 //pros::Motor neutral_stake_mtr(11, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 //pros::Rotation neutral_stake_rot(21);
 pros::Optical color_sensor(12);
@@ -41,38 +41,38 @@ Drive chassis(
   //Right Motors:
   {right_front_mtr.get_port(), right_middle_mtr.get_port(), right_back_mtr.get_port()},
   //IMU Port:
-  10,
+  18,
   //Wheel diameter (4" omnis are actually closer to 4.125"):
-  3.25,
+  2.75,
   //External Gear Ratio
   0.75,
   //Gyro scale, this is what your gyro reads when you spin the robot 360 degrees.
-  360,
+  358,
   //Remaining inputs are for position tracking
   //If you are using ZERO_TRACKER_ODOM, you ONLY need to adjust the FORWARD TRACKER CENTER DISTANCE.
   //If you are using position tracking, this is the Forward Tracker port (the tracker which runs parallel to the direction of the chassis).
   //If this is an encoder, enter the port as an integer. Triport A will be a "1", Triport B will be a "2", etc.
-  4,
+  3,
   //Input the Forward Tracker diameter (reverse it to make the direction switch):
-  2.75,
+  -2,
   //Input Forward Tracker center distance (In.) (a positive distance corresponds to a tracker on the right side of the robot, negative is left.)
   //For a zero tracker tank drive with odom, put the positive distance from the center of the robot to the right side of the drive.
-  -0.25,
+  0.5,
   //Input the Sideways Tracker Port, following the same steps as the Forward Tracker Port:
-  3,
+  1,
   //Sideways tracker diameter (reverse to make the direction switch):
-  -2.75,
+  2,
   //Sideways tracker center distance (positive distance is behind the center of the robot, negative is in front):
-  4.6
+  0.75
 );
 
 Neutral_Stake neutral_stake(
-  {11}, 
-  21
+  {19, -9}, 
+  8
 );
 
 Intake intake(
-  {-17}
+  {-7}
 	//{intake_mtr.get_port(), color_sensor1.get_port(), color1}
 );
 
@@ -99,7 +99,7 @@ void initialize() {
 	pneumatics.clench_initialize();
 	pneumatics.climb_initialize();
   pneumatics.doinker_initialize();
-  pros::Task intake_task(color_sort_red);
+  //pros::Task intake_task(color_sort_red);
   //pros::Task intake_task(color_sort_blue);
   
 }
@@ -111,7 +111,7 @@ int color_sort_red() {
   color_sensor.set_led_pwm(100);
   while (true) {
     if (color_sensor.get_hue() <= 225 and color_sensor.get_hue() >= 185) {
-      pros::delay(85);
+      pros::delay(87);
       /*while (color_sensor.get_hue() <= 210 and color_sensor.get_hue() >= 195) {
         pros::delay(0.01);
       }*/
@@ -120,7 +120,7 @@ int color_sort_red() {
       pros::delay(400);
       //color_stop = 0;
       intake.move(600);
-    } pros::delay(1);
+    } pros::delay(0.1);
   }
 }
 
@@ -128,13 +128,13 @@ int color_sort_blue() {
   color_sensor.set_led_pwm(100);
   while (true) {
     if (color_sensor.get_hue() <= 30 or color_sensor.get_hue() >= 335) {
-      pros::delay(85);
+      pros::delay(86);
       /*while (color_sensor.get_hue() <= 210 and color_sensor.get_hue() >= 195) {
         pros::delay(0.01);
       }*/
       // color_stop = 1;
       intake.move(0);
-      pros::delay(400);
+      pros::delay(350);
       //color_stop = 0;
       intake.move(600);
     } pros::delay(1);
@@ -191,7 +191,7 @@ void competition_initialize() {
 }
 void autonomous() {
   chassis.set_brake_mode('H');
-  redRightElim();
+  tank_odom_test();
 
   /*auto_started = true;
   chassis.set_brake_mode('H');
