@@ -112,7 +112,7 @@ DriveR.move_voltage(rightMotorVoltage);
 void Drive::initialize() {
  imu_calibrate();
  reset_drive_sensor();
- set_brake_mode('C');
+ set_brake_mode('H');
 }
 
 void Drive::macro(){}
@@ -196,7 +196,7 @@ void Drive::set_swing_exit_conditions(float swing_settle_error, float swing_sett
 
 float Drive::get_absolute_heading(){
   return Gyro.get_heading();
-  //return(reduce_0_to_360(Gyro.get_heading() * (360.0/355))); 
+  //return(reduce_0_to_360(Gyro.get_rotation() * (360.0/358))); 
 }
 
 float Drive::get_left_position_in(){
@@ -368,7 +368,6 @@ float Drive::get_SidewaysTracker_position(){
 void Drive::position_track(){
   while(1){
     odom.update_position(get_ForwardTracker_position(), get_SidewaysTracker_position(), get_absolute_heading());
-    std::cout << "X: " << get_ForwardTracker_position() << "Y: " << get_SidewaysTracker_position() << "angle: " << get_absolute_heading() << std::endl;
     pros::Task::delay(5);
   }
 }
@@ -443,9 +442,12 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
     // This if statement prevents the heading correction from acting up after the robot gets close
     // to being settled.
 
-    drive_output = clamp(drive_output, -fabs(heading_scale_factor)*drive_max_voltage, fabs(heading_scale_factor)*drive_max_voltage);
+    drive_output = clamp(drive_output, -fabs(heading_scale_factor)-drive_max_voltage, fabs(heading_scale_factor)+drive_max_voltage);
     heading_output = clamp(heading_output, -heading_max_voltage, heading_max_voltage);
-    std::cout << "E: " << drive_error << " O: " << drive_output << std::endl;
+    //std::cout << drive_output + heading_output << " " << drive_output - heading_output << " " << get_absolute_heading() << std::endl; 
+    //if (drive_output < 0) {
+      //drive_output = 0;
+    //}
     drive_with_voltage(drive_output+heading_output, drive_output-heading_output);
     pros::Task::delay(10);
   }
@@ -454,6 +456,7 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
   DriveR.brake();
   DriveL.set_brake_mode(MOTOR_BRAKE_HOLD);
   DriveL.brake();
+  std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
 }
 
 void Drive::turn_to_point(float X_position, float Y_position){
