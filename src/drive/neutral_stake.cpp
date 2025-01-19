@@ -7,48 +7,46 @@ Neutral_Stake::Neutral_Stake(std::initializer_list<std::int8_t> neutral_stake_mt
 
 void Neutral_Stake::neutral_stake_control() {
     if (master.get_digital(DIGITAL_B)) {
-        if (neutral_stake_rot.get_angle() >= 23000 or neutral_stake_rot.get_angle() <= 2000) {
-            if (neutral_stake_position == 1) {
-                intake.move(-120);
-                pros::delay(45);
-                intake.move(0);
-                neutral_stake_position = 0;
-            }
-            neutral_stake_mtr.move_velocity(-600);
-        } else {
-            neutral_stake_mtr.move_velocity(0);
+        if (neutral_stake_position == 1) {
+            intake.move(-120);
+            pros::delay(140);
+            intake.move(0);
+            neutral_stake_position = 0;
         }
+        neutral_stake_mtr.move_velocity(-600);
     } else if (master.get_digital(DIGITAL_Y)) {
         neutral_stake_mtr.move_velocity(600);
     } else {
         neutral_stake_mtr.move_velocity(0);
     }
     if (master.get_digital(DIGITAL_A)) {
-        while (neutral_stake_rot.get_angle() >= 33800 or neutral_stake_rot.get_angle() <= 2000) {
-            neutral_stake_mtr.move_velocity(-600);
-        } if (neutral_stake_rot.get_angle() <= 30500) {
-            while (neutral_stake_rot.get_angle() <= 31800) {
-                neutral_stake_mtr.move_velocity(600);
+        while (neutral_stake_rot.get_angle() >= 33800 or neutral_stake_rot.get_angle() <= 3600) {
+            neutral_stake_mtr.move_velocity(-300);
+        }  
+        if (neutral_stake_rot.get_angle() <= 31000) {
+            while (neutral_stake_rot.get_angle() <= 31000) {
+                neutral_stake_mtr.move_velocity(300);
             } 
         }
         neutral_stake_mtr.move_velocity(0);
         set_brake_mode('H');
         
         neutral_stake_position = 1;
-        
-        /*if (neutral_stake_position == 0) {
-            while (neutral_stake_rot.get_angle() <= 3850 or neutral_stake_rot.get_angle() >= 34000) {
-                neutral_stake.move(325);
+        /*
+        if (neutral_stake_position == 0) {
+            while (neutral_stake_rot.get_angle() <= 3050 or neutral_stake_rot.get_angle() >= 32000) {
+                neutral_stake_mtr.move_velocity(-325);
             }
-            while (neutral_stake_rot.get_angle() >= 3900) {
-                neutral_stake.move(-325);
+            while (neutral_stake_rot.get_angle() >= 3100) {
+                neutral_stake_mtr.move_velocity(325);
             } neutral_stake_position = 1;
         } else {
             while (neutral_stake_rot.get_angle() <= 12000) {
-                neutral_stake.move(350);
+                neutral_stake_mtr.move_velocity(-350);
             } neutral_stake_position = 0;
         }*/
     } 
+    pros::screen::print(TEXT_LARGE, 50, 50, "%d", neutral_stake_rot.get_angle());
 }
 
 void Neutral_Stake::initialize() {
@@ -63,10 +61,15 @@ void Neutral_Stake::move1() {
     while (neutral_stake_rot.get_angle() >= 20000 or neutral_stake_rot.get_angle() <= 1000) {
         neutral_stake_mtr.move_velocity(-600);
     } neutral_stake_mtr.move_velocity(0);
-}
+}   
+void Neutral_Stake::move3() {
+    while (neutral_stake_rot.get_angle() >= 16600 or neutral_stake_rot.get_angle() <= 1000) {
+        neutral_stake_mtr.move_velocity(-600);
+    } neutral_stake_mtr.move_velocity(0);
+} 
 
 void Neutral_Stake::move2(double voltage) {
-    neutral_stake_mtr.move_velocity(voltage);
+    neutral_stake_mtr.move_velocity((-1)*voltage);
 }
 
 void Neutral_Stake::set_brake_mode(char brake_type) {
