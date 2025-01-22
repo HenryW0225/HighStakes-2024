@@ -1,39 +1,19 @@
 #include "main.h"
 #include <iostream>
 
-
-//new stuff
-//int color_stop = 0;
 //Motor Definitions
 pros::adi::DigitalOut clench('A');
 pros::adi::DigitalOut climb('F');
-pros::adi::DigitalOut doinker('B');
-pros::Motor left_front_mtr(-5, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-pros::Motor left_middle_mtr(-10, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-pros::Motor left_back_mtr(-4, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+pros::adi::DigitalOut doinker('G');
+pros::Motor left_front_mtr(-1, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+pros::Motor left_middle_mtr(-4, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+pros::Motor left_back_mtr(-7, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor right_front_mtr(20, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-pros::Motor right_middle_mtr(2, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+pros::Motor right_middle_mtr(3, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor right_back_mtr(6, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-//pros::Motor intake_mtr(-7, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-//pros::Motor neutral_stake_mtr(11, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-//pros::Rotation neutral_stake_rot(21);
-pros::Optical color_sensor(12);
+pros::Optical color_sensor(11);
 
-
-/*
-pros::Motor left_front_mtr(, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-pros::Motor left_middle_mtr(, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-pros::Motor left_back_mtr(, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-pros::Motor right_front_mtr(6, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-pros::Motor right_middle_mtr(19, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-pros::Motor right_back_mtr(21, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-pros::Motor intake_mtrl(14, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-pros::Motor intake_mtrr(-90, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-*/
-
-//Chassis constructor
 Drive chassis( 
-  //Specify your drive setup below. There are eight options:
   //ZERO_TRACKER_NO_ODOM, ZERO_TRACKER_ODOM, TANK_ONE_ENCODER, TANK_ONE_ROTATION, TANK_TWO_ENCODER, TANK_TWO_ROTATION, HOLONOMIC_TWO_ENCODER, and HOLONOMIC_TWO_ROTATION
   TANK_TWO_ROTATION,
   //Left Motors:
@@ -41,61 +21,48 @@ Drive chassis(
   //Right Motors:
   {right_front_mtr.get_port(), right_middle_mtr.get_port(), right_back_mtr.get_port()},
   //IMU Port:
-  18,
+  16,
   //Wheel diameter (4" omnis are actually closer to 4.125"):
   2.75,
   //External Gear Ratio
   0.75,
   //Gyro scale, this is what your gyro reads when you spin the robot 360 degrees.
-  358,
+  360,
   //Remaining inputs are for position tracking
   //If you are using ZERO_TRACKER_ODOM, you ONLY need to adjust the FORWARD TRACKER CENTER DISTANCE.
   //If you are using position tracking, this is the Forward Tracker port (the tracker which runs parallel to the direction of the chassis).
   //If this is an encoder, enter the port as an integer. Triport A will be a "1", Triport B will be a "2", etc.
-  3,
+  5,
   //Input the Forward Tracker diameter (reverse it to make the direction switch):
   -2,
   //Input Forward Tracker center distance (In.) (a positive distance corresponds to a tracker on the right side of the robot, negative is left.)
   //For a zero tracker tank drive with odom, put the positive distance from the center of the robot to the right side of the drive.
-  0.5,
+  0,
   //Input the Sideways Tracker Port, following the same steps as the Forward Tracker Port:
-  1,
+  2,
   //Sideways tracker diameter (reverse to make the direction switch):
   2,
   //Sideways tracker center distance (positive distance is behind the center of the robot, negative is in front):
-  0.75
+  2.6
 );
 
 Neutral_Stake neutral_stake(
-  {19, -9}, 
-  8
+  {17, -10}, 
+  9
 );
 
 Intake intake(
-  {-7}
-	//{intake_mtr.get_port(), color_sensor1.get_port(), color1}
+  {-8}
 );
 
 Pneumatics pneumatics(
 	{clench, climb, doinker}
 );
 
-
-void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
-	} else {
-		pros::lcd::clear_line(2);
-	}
-}
-
 void initialize() {
-	pros::lcd::initialize();
 	chassis.initialize();
 	intake.initialize();
-  neutral_stake.initialize();
+  neutral_stake.initialize(); 
 	pneumatics.clench_initialize();
 	pneumatics.climb_initialize();
   pneumatics.doinker_initialize();
@@ -104,21 +71,13 @@ void initialize() {
   
 }
 
-
-
-
 int color_sort_red() {
   color_sensor.set_led_pwm(100);
   while (true) {
-    if (color_sensor.get_hue() <= 225 and color_sensor.get_hue() >= 185) {
-      pros::delay(87);
-      /*while (color_sensor.get_hue() <= 210 and color_sensor.get_hue() >= 195) {
-        pros::delay(0.01);
-      }*/
-      // color_stop = 1;
+    if ((color_sensor.get_hue() <= 225 and color_sensor.get_hue() >= 205) && (color_sensor.get_saturation() >= 0.5)) {
+      pros::delay(80);
       intake.move(0);
-      pros::delay(400);
-      //color_stop = 0;
+      pros::delay(350);
       intake.move(600);
     } pros::delay(0.1);
   }
@@ -127,24 +86,15 @@ int color_sort_red() {
 int color_sort_blue() {
   color_sensor.set_led_pwm(100);
   while (true) {
-    if (color_sensor.get_hue() <= 30 or color_sensor.get_hue() >= 335) {
-      pros::delay(86);
-      /*while (color_sensor.get_hue() <= 210 and color_sensor.get_hue() >= 195) {
-        pros::delay(0.01);
-      }*/
-      // color_stop = 1;
+    if ((color_sensor.get_hue() <= 30 or color_sensor.get_hue() >= 335) && (color_sensor.get_saturation() >= 0.56 ||color_sensor.get_saturation() <= 0.72)) {
+      pros::delay(145);
       intake.move(0);
       pros::delay(350);
-      //color_stop = 0;
       intake.move(600);
-    } pros::delay(1);
+    } pros::delay(0.1);
   }
 }
 
-
-void disabled() {}
-
-//ASSET(example_txt);
 int current_auton_selection = 0;
 bool auto_started = false;
 
@@ -191,53 +141,38 @@ void competition_initialize() {
 }
 void autonomous() {
   chassis.set_brake_mode('H');
-  tank_odom_test();
-
-  /*auto_started = true;
-  chassis.set_brake_mode('H');
-  switch(current_auton_selection){  
-    case 0:
-      redLeftQual(); //This is the default auton, if you don't select from the brain.
-      break;        //Change these to be your own auton functions in order to use the auton selector.
-    case 1:         //Tap the screen to cycle through autons.
-      redRightQual();
-      break;
-    case 2:
-      redRightElim();
-      break;
-    case 3:
-      redLeftElim();
-      break;
-    case 4:
-      blueRightQual(); 
-      break;     
-    case 5:     
-      blueLeftQual();
-      break;
-    case 6:
-      blueRightElim();
-      break;
-    case 7:
-      blueLeftElim();
-      break;
-    case 8:
-      skills();
-      break;
- }
- chassis.set_brake_mode('C');*/
+  driveIntake();
+  /*
+  // USED FOR COLOR SORT TESTING
+  while (1) {
+  std::string x_str, y_str, heading_str;
+   x_str = std::to_string(color_sensor.get_hue());
+      y_str = std::to_string(color_sensor.get_saturation());
+         pros::screen::draw_rect(0,0,480,240);
+         pros::screen::set_pen(pros::Color::white);
+         pros::screen::print(TEXT_LARGE, 50, 50, x_str.c_str());
+         pros::screen::print(TEXT_LARGE, 50, 125, y_str.c_str());
+  }
+  */
 }
 
 void opcontrol(void) {
   chassis.set_brake_mode('C');
   neutral_stake.set_brake_mode('H');
+  
   while (1) {
     chassis.arcade_control();
-    //chassis.tank_control();
-    //chassis.arcade_control_double();
     neutral_stake.neutral_stake_control();
-    // if (color_stop == 0) {
-    // intake.intake_control();
-    //}
+    /*
+    // USED FOR COLOR SORT TESTING
+    std::string x_str, y_str, heading_str;
+    x_str = std::to_string(color_sensor.get_hue());
+    y_str = std::to_string(color_sensor.get_saturation());
+    pros::screen::draw_rect(0,0,480,240);
+    pros::screen::set_pen(pros::Color::white);
+    pros::screen::print(TEXT_LARGE, 50, 50, x_str.c_str());
+    pros::screen::print(TEXT_LARGE, 50, 125, y_str.c_str());
+    */
     intake.intake_control();
 		pneumatics.clench_control();
     pneumatics.doinker_control();
@@ -245,3 +180,4 @@ void opcontrol(void) {
     pros::delay(util::DELAY_TIME); 
   }
 }
+void disabled() {}
