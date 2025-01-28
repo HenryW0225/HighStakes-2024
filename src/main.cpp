@@ -7,12 +7,12 @@ pros::adi::DigitalOut climb('F');
 pros::adi::DigitalOut doinker('G');
 pros::Motor left_front_mtr(-1, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor left_middle_mtr(-4, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-pros::Motor left_back_mtr(-7, pros::v5::MotorGears::blue, pros::v5::Mot;rUnits::degrees);
+pros::Motor left_back_mtr(-7, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor right_front_mtr(20, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor right_middle_mtr(3, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor right_back_mtr(6, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Optical color_sensor(11);
-
+bool driveControl = true;
 Drive chassis( 
   //ZERO_TRACKER_NO_ODOM, ZERO_TRACKER_ODOM, TANK_ONE_ENCODER, TANK_ONE_ROTATION, TANK_TWO_ENCODER, TANK_TWO_ROTATION, HOLONOMIC_TWO_ENCODER, and HOLONOMIC_TWO_ROTATION
   TANK_TWO_ROTATION,
@@ -53,11 +53,13 @@ Neutral_Stake neutral_stake(
 
 Intake intake(
   {-8}
+
 );
 
 Pneumatics pneumatics(
 	{clench, climb, doinker}
 );
+
 
 void initialize() {
 	chassis.initialize();
@@ -70,28 +72,32 @@ void initialize() {
   //pros::Task intake_task(color_sort_blue);
   
 }
-
-int color_sort_red() {
-  color_sensor.set_led_pwm(100);
-  while (true) {
-    if ((color_sensor.get_hue() <= 225 and color_sensor.get_hue() >= 205) && (color_sensor.get_saturation() >= 0.5)) {
-      pros::delay(80);
-      intake.move(0);
-      pros::delay(350);
-      intake.move(600);
-    } pros::delay(0.1);
+// use intake rotations
+int color_sort_red() { 
+  if (!driveControl){
+    color_sensor.set_led_pwm(100);
+    while (true) {
+      if ((color_sensor.get_hue() <= 225 and color_sensor.get_hue() >= 205) && (color_sensor.get_saturation() >= 0.5)) {
+        pros::delay(80);
+        intake.move(0);
+        pros::delay(350);
+        intake.move(600);
+      } pros::delay(0.1);
+    }
   }
 }
 
 int color_sort_blue() {
-  color_sensor.set_led_pwm(100);
-  while (true) {
-    if ((color_sensor.get_hue() <= 30 or color_sensor.get_hue() >= 335) && (color_sensor.get_saturation() >= 0.56 ||color_sensor.get_saturation() <= 0.72)) {
-      pros::delay(145);
-      intake.move(0);
-      pros::delay(350);
-      intake.move(600);
-    } pros::delay(0.1);
+  if (!driveControl){
+    color_sensor.set_led_pwm(100);
+    while (true) {
+      if ((color_sensor.get_hue() <= 30 or color_sensor.get_hue() >= 335) && (color_sensor.get_saturation() >= 0.56 ||color_sensor.get_saturation() <= 0.72)) {
+        pros::delay(145);
+        intake.move(0);
+        pros::delay(350);
+        intake.move(600);
+      } pros::delay(0.1);
+    }
   }
 }
 
@@ -141,30 +147,35 @@ void competition_initialize() {
 }
 void autonomous() {
   chassis.set_brake_mode('H');
-  driveIntake();
-  /*
+  driveControl=false;
+  redRightQual();
   // USED FOR COLOR SORT TESTING
-  while (1) {
+  /*
+  float x, y, heading;
   std::string x_str, y_str, heading_str;
-   x_str = std::to_string(color_sensor.get_hue());
-      y_str = std::to_string(color_sensor.get_saturation());
-         pros::screen::draw_rect(0,0,480,240);
-         pros::screen::set_pen(pros::Color::white);
-         pros::screen::print(TEXT_LARGE, 50, 50, x_str.c_str());
-         pros::screen::print(TEXT_LARGE, 50, 125, y_str.c_str());
+  chassis.set_brake_mode('C');
+  chassis.set_coordinates(0, 0, 0);
+  while (1) {
+   std::string x_str, y_str, heading_str;
+    x_str = std::to_string(color_sensor.get_hue());
+    y_str = std::to_string(color_sensor.get_saturation());
+    pros::screen::draw_rect(0,0,480,240);
+    pros::screen::set_pen(pros::Color::white);
+    pros::screen::print(TEXT_LARGE, 50, 50, x_str.c_str());
+    pros::screen::print(TEXT_LARGE, 50, 125, y_str.c_str());
   }
   */
 }
 
 void opcontrol(void) {
   chassis.set_brake_mode('C');
-  neutral_stake.set_brake_mode('H');
-  
+  neutral_stake.set_brake_mode('H'); 
   while (1) {
     chassis.arcade_control();
     neutral_stake.neutral_stake_control();
-    /*
+   
     // USED FOR COLOR SORT TESTING
+    /*
     std::string x_str, y_str, heading_str;
     x_str = std::to_string(color_sensor.get_hue());
     y_str = std::to_string(color_sensor.get_saturation());
@@ -174,9 +185,10 @@ void opcontrol(void) {
     pros::screen::print(TEXT_LARGE, 50, 125, y_str.c_str());
     */
     intake.intake_control();
-		pneumatics.clench_control();
+    pneumatics.clench_control();
     pneumatics.doinker_control();
     //pneumatics.climb_control();
+    driveControl=true;
     pros::delay(util::DELAY_TIME); 
   }
 }
