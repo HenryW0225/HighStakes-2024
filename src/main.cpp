@@ -1,9 +1,6 @@
 #include "main.h"
 #include <iostream>
 
-
-//new stuff
-//int color_stop = 0;
 //Motor Definitions
 pros::adi::DigitalOut clench('A');
 pros::adi::DigitalOut climb('F');
@@ -14,15 +11,9 @@ pros::Motor left_back_mtr(-7, pros::v5::MotorGears::blue, pros::v5::MotorUnits::
 pros::Motor right_front_mtr(20, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor right_middle_mtr(3, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor right_back_mtr(6, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-//pros::Motor intake_mtr(-7, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-//pros::Motor neutral_stake_mtr(11, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
-//pros::Rotation neutral_stake_rot(21);
-pros::Optical color_sensor(12);
-
-
-//Chassis constructor
+pros::Optical color_sensor(11);
+bool driveControl = true;
 Drive chassis( 
-  //Specify your drive setup below. There are eight options:
   //ZERO_TRACKER_NO_ODOM, ZERO_TRACKER_ODOM, TANK_ONE_ENCODER, TANK_ONE_ROTATION, TANK_TWO_ENCODER, TANK_TWO_ROTATION, HOLONOMIC_TWO_ENCODER, and HOLONOMIC_TWO_ROTATION
   TANK_TWO_ROTATION,
   //Left Motors:
@@ -30,7 +21,7 @@ Drive chassis(
   //Right Motors:
   {right_front_mtr.get_port(), right_middle_mtr.get_port(), right_back_mtr.get_port()},
   //IMU Port:
-  18,
+  16,
   //Wheel diameter (4" omnis are actually closer to 4.125"):
   2.75,
   //External Gear Ratio
@@ -62,7 +53,7 @@ Neutral_Stake neutral_stake(
 
 Intake intake(
   {-8}
-	//{intake_mtr.get_port(), color_sensor1.get_port(), color1}
+
 );
 
 Pneumatics pneumatics(
@@ -73,7 +64,7 @@ Pneumatics pneumatics(
 void initialize() {
 	chassis.initialize();
 	intake.initialize();
-  neutral_stake.initialize();
+  neutral_stake.initialize(); 
 	pneumatics.clench_initialize();
 	pneumatics.climb_initialize();
   pneumatics.doinker_initialize();
@@ -81,43 +72,34 @@ void initialize() {
   //pros::Task intake_task(color_sort_blue);
   
 }
-
-int color_sort_red() {
-  color_sensor.set_led_pwm(100);
-  while (true) {
-    if (color_sensor.get_hue() <= 225 and color_sensor.get_hue() >= 185) {
-      pros::delay(87);
-      /*while (color_sensor.get_hue() <= 210 and color_sensor.get_hue() >= 195) {
-        pros::delay(0.01);
-      }*/
-      // color_stop = 1;
-      intake.move(0);
-      pros::delay(400);
-      //color_stop = 0;
-      intake.move(600);
-    } pros::delay(0.1);
+// use intake rotations
+int color_sort_red() { 
+  if (!driveControl){
+    color_sensor.set_led_pwm(100);
+    while (true) {
+      if ((color_sensor.get_hue() <= 225 and color_sensor.get_hue() >= 205) && (color_sensor.get_saturation() >= 0.5)) {
+        pros::delay(80);
+        intake.move(0);
+        pros::delay(350);
+        intake.move(600);
+      } pros::delay(0.1);
+    }
   }
 }
 
 int color_sort_blue() {
-  color_sensor.set_led_pwm(100);
-  while (true) {
-    if (color_sensor.get_hue() <= 30 or color_sensor.get_hue() >= 335) {
-      pros::delay(86);
-      /*while (color_sensor.get_hue() <= 210 and color_sensor.get_hue() >= 195) {
-        pros::delay(0.01);
-      }*/
-      // color_stop = 1;
-      intake.move(0);
-      pros::delay(350);
-      //color_stop = 0;
-      intake.move(600);
-    } pros::delay(1);
+  if (!driveControl){
+    color_sensor.set_led_pwm(100);
+    while (true) {
+      if ((color_sensor.get_hue() <= 30 or color_sensor.get_hue() >= 335) && (color_sensor.get_saturation() >= 0.56 ||color_sensor.get_saturation() <= 0.72)) {
+        pros::delay(145);
+        intake.move(0);
+        pros::delay(350);
+        intake.move(600);
+      } pros::delay(0.1);
+    }
   }
 }
-
-
-void disabled() {}
 
 int current_auton_selection = 0;
 bool auto_started = false;
@@ -166,60 +148,48 @@ void competition_initialize() {
 void autonomous() {
   chassis.set_brake_mode('H');
   redRightQual();
-
-  /*auto_started = true;
-  chassis.set_brake_mode('H');
-  switch(current_auton_selection){  
-    case 0:
-      redLeftQual(); //This is the default auton, if you don't select from the brain.
-      break;        //Change these to be your own auton functions in order to use the auton selector.
-    case 1:         //Tap the screen to cycle through autons.
-      redRightQual();
-      break;
-    case 2:
-      redRightElim();
-      break;
-    case 3:
-      redLeftElim();
-      break;
-    case 4:
-      blueRightQual(); 
-      break;     
-    case 5:     
-      blueLeftQual();
-      break;
-    case 6:
-      blueRightElim();
-      break;
-    case 7:
-      blueLeftElim();
-      break;
-    case 8:
-      skills();
-      break;
- }
- chassis.set_brake_mode('C');*/
+  driveControl=false;
+  // USED FOR COLOR SORT TESTING
+  /*
+  float x, y, heading;
+  std::string x_str, y_str, heading_str;
+  chassis.set_brake_mode('C');
+  chassis.set_coordinates(0, 0, 0);
+  while (1) {
+   std::string x_str, y_str, heading_str;
+    x_str = std::to_string(color_sensor.get_hue());
+    y_str = std::to_string(color_sensor.get_saturation());
+    pros::screen::draw_rect(0,0,480,240);
+    pros::screen::set_pen(pros::Color::white);
+    pros::screen::print(TEXT_LARGE, 50, 50, x_str.c_str());
+    pros::screen::print(TEXT_LARGE, 50, 125, y_str.c_str());
+  }
+  */
 }
 
 void opcontrol(void) {
-  std::printf("X: %s","hi");
-   float x, y, heading;
-  std::string x_str, y_str, heading_str;
   chassis.set_brake_mode('C');
-  neutral_stake.set_brake_mode('H');
-  
-  chassis.set_coordinates(0,0,0);
-  
+  neutral_stake.set_brake_mode('H'); 
   while (1) {
     chassis.arcade_control();
     neutral_stake.neutral_stake_control();
-    // if (color_stop == 0) {
-    // intake.intake_control();
-    //}
+   
+    // USED FOR COLOR SORT TESTING
+    /*
+    std::string x_str, y_str, heading_str;
+    x_str = std::to_string(color_sensor.get_hue());
+    y_str = std::to_string(color_sensor.get_saturation());
+    pros::screen::draw_rect(0,0,480,240);
+    pros::screen::set_pen(pros::Color::white);
+    pros::screen::print(TEXT_LARGE, 50, 50, x_str.c_str());
+    pros::screen::print(TEXT_LARGE, 50, 125, y_str.c_str());
+    */
     intake.intake_control();
 		pneumatics.clench_control();
     pneumatics.doinker_control();
     //pneumatics.climb_control();
+    driveControl=true;
     pros::delay(util::DELAY_TIME); 
   }
 }
+void disabled() {}
