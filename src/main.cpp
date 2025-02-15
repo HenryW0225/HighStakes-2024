@@ -11,11 +11,16 @@ pros::Motor left_back_mtr(-7, pros::v5::MotorGears::blue, pros::v5::MotorUnits::
 pros::Motor right_front_mtr(20, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor right_middle_mtr(3, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor right_back_mtr(6, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+
 pros::Optical color_sensor(11);
 bool driveControl = true;
 Drive chassis( 
   //ZERO_TRACKER_NO_ODOM, ZERO_TRACKER_ODOM, TANK_ONE_ENCODER, TANK_ONE_ROTATION, TANK_TWO_ENCODER, TANK_TWO_ROTATION, HOLONOMIC_TWO_ENCODER, and HOLONOMIC_TWO_ROTATION
   TANK_TWO_ROTATION,
+  //Left Motors:
+  //{left_front_mtr.get_port(), left_back_mtr.get_port()},
+  //Right Motors:
+  //{right_front_mtr.get_port(), right_back_mtr.get_port()},
   //Left Motors:
   {left_front_mtr.get_port(), left_middle_mtr.get_port(), left_back_mtr.get_port()},
   //Right Motors:
@@ -53,11 +58,11 @@ Neutral_Stake neutral_stake(
 
 Intake intake(
   {-8}
-
+  //{-8, 19}
 );
 
 Pneumatics pneumatics(
-	{clench, climb, doinker}
+	{clench, doinker}
 );
 
 
@@ -66,7 +71,6 @@ void initialize() {
 	intake.initialize();
   neutral_stake.initialize(); 
 	pneumatics.clench_initialize();
-	pneumatics.climb_initialize();
   pneumatics.doinker_initialize();
   //pros::Task intake_task(color_sort_red);
   //pros::Task intake_task(color_sort_blue);
@@ -85,6 +89,7 @@ int color_sort_red() {
       } pros::delay(0.1);
     }
   }
+  return 1;
 }
 
 int color_sort_blue() {
@@ -99,95 +104,29 @@ int color_sort_blue() {
       } pros::delay(0.1);
     }
   }
+  return 1;
 }
 
-int current_auton_selection = 0;
-bool auto_started = false;
 
-void competition_initialize() {
-  while(auto_started == false){            //Changing the names below will only change their names on the
-    pros::screen::erase();                 //brain screen for auton selection.
-    switch(current_auton_selection){       //Tap the brain screen to cycle through autons.
-      case 0:
-        pros::screen::print(TEXT_LARGE, 50, 50, "RedSWP");
-        break;
-      case 1:
-       pros::screen::print(TEXT_LARGE, 50, 50, "RedBasicQual");
-        break;
-      case 2:
-        pros::screen::print(TEXT_LARGE, 50, 50, "Red Right Elim");
-        break;
-      case 3:
-        pros::screen::print(TEXT_LARGE, 50, 50, "Red Left Elim");
-        break;
-      case 4:
-        pros::screen::print(TEXT_LARGE, 50, 50, "BlueSWP");
-        break;
-      case 5:
-        pros::screen::print(TEXT_LARGE, 50, 50, "BlueBasicQual");
-        break;
-      case 6:
-        pros::screen::print(TEXT_LARGE, 50, 50, "Blue Rigt Elim");
-        break;
-      case 7:
-        pros::screen::print(TEXT_LARGE, 50, 50, "Blue Left Elim");
-        break;
-      case 8:
-        pros::screen::print(TEXT_LARGE, 50, 50, "Skills");
-        break;
-    }
-    if(pros::screen::touch_status().touch_status == TOUCH_PRESSED){
-      current_auton_selection ++;
-      while(pros::screen::touch_status().touch_status == TOUCH_PRESSED  || pros::screen::touch_status().touch_status == TOUCH_HELD) {pros::delay(10);}
-    } else if (current_auton_selection == 9){
-      current_auton_selection = 0;
-    }
-    pros::Task::delay(10);
-    }
-}
+void competition_initialize() {}
+
 void autonomous() {
   chassis.set_brake_mode('H');
-  driveControl=false;
-  redRightQual();
-  // USED FOR COLOR SORT TESTING
-  /*
-  float x, y, heading;
-  std::string x_str, y_str, heading_str;
-  chassis.set_brake_mode('C');
-  chassis.set_coordinates(0, 0, 0);
-  while (1) {
-   std::string x_str, y_str, heading_str;
-    x_str = std::to_string(color_sensor.get_hue());
-    y_str = std::to_string(color_sensor.get_saturation());
-    pros::screen::draw_rect(0,0,480,240);
-    pros::screen::set_pen(pros::Color::white);
-    pros::screen::print(TEXT_LARGE, 50, 50, x_str.c_str());
-    pros::screen::print(TEXT_LARGE, 50, 125, y_str.c_str());
-  }
-  */
+  //driveControl=false;
+  redRightElim();
 }
 
 void opcontrol(void) {
   chassis.set_brake_mode('C');
   neutral_stake.set_brake_mode('H'); 
+  // pros::Task neutral_stake_task(Neutral_Stake::neutral_stake_task);
+  // pros::Task intake_task(Intake::intake_task);
   while (1) {
-    chassis.arcade_control();
-    neutral_stake.neutral_stake_control();
-   
-    // USED FOR COLOR SORT TESTING
-    /*
-    std::string x_str, y_str, heading_str;
-    x_str = std::to_string(color_sensor.get_hue());
-    y_str = std::to_string(color_sensor.get_saturation());
-    pros::screen::draw_rect(0,0,480,240);
-    pros::screen::set_pen(pros::Color::white);
-    pros::screen::print(TEXT_LARGE, 50, 50, x_str.c_str());
-    pros::screen::print(TEXT_LARGE, 50, 125, y_str.c_str());
-    */
     intake.intake_control();
+    neutral_stake.neutral_stake_control();
+    chassis.arcade_control();
     pneumatics.clench_control();
     pneumatics.doinker_control();
-    //pneumatics.climb_control();
     driveControl=true;
     pros::delay(util::DELAY_TIME); 
   }

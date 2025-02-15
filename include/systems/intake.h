@@ -2,7 +2,7 @@
 
 class Intake{
     public:
-    pros::MotorGroup intake;
+    pros::MotorGroup intake_mtr;
     //pros::Optical color_sensor;
     Intake(std::initializer_list<std::int8_t> intake_grp);
 
@@ -12,5 +12,7 @@ class Intake{
     float get_speed();
     void initialize();
     void move(double velocity);
+
+    static int intake_task();
 
 };

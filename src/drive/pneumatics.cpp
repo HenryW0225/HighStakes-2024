@@ -1,9 +1,8 @@
 #include "main.h"
 
 
-Pneumatics::Pneumatics(pros::adi::DigitalOut clench_port, pros::adi::DigitalOut climb_port, pros::adi::DigitalOut doinker_port)
+Pneumatics::Pneumatics(pros::adi::DigitalOut clench_port, pros::adi::DigitalOut doinker_port)
    : clench(clench_port),
-   climb(climb_port),
    doinker(doinker_port) {}
 
 
@@ -26,28 +25,6 @@ void Pneumatics::clench_initialize() {
 void Pneumatics::clench_v(int value) {
    clench.set_value(value);
 }
-
-
-void Pneumatics::climb_control() {
-  if (master.get_digital(DIGITAL_Y)){
-       climb_open = !climb_open;
-       climb.set_value(climb_open);
-       while (master.get_digital(DIGITAL_Y)) {
-           pros::delay(util::DELAY_TIME);
-       }
-   }
-}
-
-
-void Pneumatics::climb_initialize() {
-   climb.set_value(0);
-}
-
-
-void Pneumatics::climb_v(int value) {
-   climb.set_value(value);
-}
-
 
 
 void Pneumatics::doinker_control() {

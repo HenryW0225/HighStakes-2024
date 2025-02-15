@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "RUSH :)",
+    "project_name": "rush :) :)",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -256,7 +256,7 @@
     },
     "upload_options": {
       "description": "Coming Soon",
-      "slot": 5
+      "slot": 3
     },
     "use_early_access": false
   }

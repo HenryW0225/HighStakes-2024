@@ -158,4 +158,5 @@ public:
   void right_swing_to_point(float X_position, float Y_position, float extra_angle_deg, float swing_max_voltage, float swing_settle_error, float swing_settle_time, float swing_timeout, float swing_kp, float swing_ki, float swing_kd, float swing_starti);
 
   //finding coordinates
+  void calculate();
 };

@@ -18,7 +18,7 @@ void Neutral_Stake::neutral_stake_control() {
     double LOADING_DOWN_ANGLE_TRESHOLD = 1250; 
     double SAFE_ANGLE_DOWN = 27000;
     double DESCORE_ANGLE = 22000;
-    
+
     if (master.get_digital(DIGITAL_A)) {
         neutral_stake_position = 1;
         cout << "Before: " << neutral_stake_rot.get_angle() << endl;
@@ -49,30 +49,39 @@ void Neutral_Stake::neutral_stake_control() {
             cout << "Loading down: " << neutral_stake_rot.get_angle() << endl;
         }
     } else if (master.get_digital(DIGITAL_B)) {
-        if (neutral_stake_position == 1){
+        cout << "Scoring from loaded: " << neutral_stake_rot.get_angle() << endl;
+        if (neutral_stake_rot.get_angle() >  29000){
+            cout << "miving intake motors: " << intake.get_speed() << endl;
             intake.move(-250);
             pros::delay(120);
+            cout << "miving intake motors: " << intake.get_speed() << endl;
             intake.move(0);
             pros::delay(100);
             neutral_stake_position = 0;
         }
         neutral_stake_mtr.move_velocity(-400);
-        pros::delay(10);
     }
     else if (master.get_digital(DIGITAL_Y)) {
         neutral_stake_mtr.move_velocity(400);
-        pros::delay(10);
     } 
     else if (master.get_digital(DIGITAL_R2)) {
-       while (neutral_stake_rot.get_angle() > DESCORE_ANGLE 
-             || neutral_stake_rot.get_angle() < LOADING_UP_ANGLE_TRESHOLD) {
+    while (neutral_stake_rot.get_angle() > DESCORE_ANGLE 
+            || neutral_stake_rot.get_angle() < LOADING_UP_ANGLE_TRESHOLD) {
             neutral_stake_mtr.move_velocity(-LOADING_UP_FULL_VELOCITY);
             pros::delay(10);
         }
     } 
     else {
         neutral_stake_mtr.move_velocity(0);
-    } 
+    }
+}
+
+int Neutral_Stake::neutral_stake_task() {
+    while(1) {
+        neutral_stake.neutral_stake_control();
+        pros::delay(10);
+    }
+    return 1;
 }
 
 void Neutral_Stake::initialize() {

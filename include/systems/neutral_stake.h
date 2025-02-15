@@ -14,4 +14,6 @@ class Neutral_Stake{
     void set_brake_mode(char brake_type);
     //float get_angle();
     void set_up();
+
+    static int neutral_stake_task();
 };

@@ -1,6 +1,7 @@
 #include "main.h"
 #define MOVING_VOLTAGE 25
 float PII = 3.14159265359;
+float GYRO_SCALE;
 
 Drive::Drive(enum::drive_setup_enum drive_setup, std::initializer_list<std::int8_t> DriveL, std::initializer_list<std::int8_t> DriveR, int gyro_port, float wheel_diameter, float wheel_ratio, float gyro_scale, int ForwardTracker_port, float ForwardTracker_diameter, float ForwardTracker_center_distance, int SidewaysTracker_port, float SidewaysTracker_diameter, float SidewaysTracker_center_distance) 
   : DriveL(DriveL),
@@ -22,7 +23,7 @@ Drive::Drive(enum::drive_setup_enum drive_setup, std::initializer_list<std::int8
   // Set constants for tick_per_inch calculation
   float WHEEL_DIAMETER = wheel_diameter;
   float RATIO = wheel_ratio;
-  float GYRO_SCALE = gyro_scale;
+  GYRO_SCALE = gyro_scale;
 
   if (drive_setup != ZERO_TRACKER_NO_ODOM){
     if (drive_setup == TANK_ONE_ENCODER || drive_setup == TANK_ONE_ROTATION || drive_setup == ZERO_TRACKER_ODOM){
@@ -195,6 +196,7 @@ void Drive::set_swing_exit_conditions(float swing_settle_error, float swing_sett
 }
 
 float Drive::get_absolute_heading(){
+  //std::cout << Gyro.get_heading() << std::endl;
   return Gyro.get_heading();
   //return(reduce_0_to_360(Gyro.get_rotation() * (360.0/358))); 
 }
@@ -373,7 +375,14 @@ void Drive::position_track(){
 }
 
 void Drive::set_heading(float orientation_deg){
-  Gyro.set_heading(reduce_0_to_360(orientation_deg*gyro_scale/360.0));
+  //std::cout << orientation_deg << std::endl;
+  
+  
+  
+  Gyro.set_heading(orientation_deg*GYRO_SCALE/360.0);
+  //Gyro.set_heading(orientation_deg);
+  //std::cout << Gyro.get_heading() << std::endl;
+
 }
 
 void Drive::set_coordinates(float X_position, float Y_position, float orientation_deg){
@@ -420,6 +429,7 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
 }
 
 void Drive::drive_to_point(float X_position, float Y_position, float drive_max_voltage, float heading_max_voltage, float drive_settle_error, float drive_settle_time, float drive_timeout, float drive_kp, float drive_ki, float drive_kd, float drive_starti, float heading_kp, float heading_ki, float heading_kd, float heading_starti){
+  std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
   PID drivePID(hypot(X_position-get_X_position(),Y_position-get_Y_position()), drive_kp, drive_ki, drive_kd, drive_starti, drive_settle_error, drive_settle_time, drive_timeout);
   PID headingPID(reduce_negative_180_to_180(to_deg(atan2(X_position-get_X_position(),Y_position-get_Y_position()))-get_absolute_heading()), heading_kp, heading_ki, heading_kd, heading_starti);
   while(drivePID.is_settled() == false){
@@ -546,3 +556,9 @@ int Drive::position_track_task(){
   return(0);
 }
 
+void calculate() {
+  while (true) {
+    std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
+    pros::delay(50);
+  } 
+}
