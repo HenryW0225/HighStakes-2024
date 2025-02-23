@@ -65,8 +65,7 @@
 #include "systems/drive.h"
 #include "systems/util.h"
 #include "systems/PID.h"
-#include "systems/neutral_stake.h"
-#include "systems/intake.h"
+#include "systems/scoring_mech.h"
 #include "systems/pneumatics.h"
 
 #include "autons.h"
@@ -97,8 +96,8 @@ void initialize(void);
 void disabled(void);
 void competition_initialize(void);
 void opcontrol(void);
-int color_sort_red();
-int color_sort_blue();
+//int color_sort_red();
+//int color_sort_blue();
 #ifdef __cplusplus
 }
 #endif

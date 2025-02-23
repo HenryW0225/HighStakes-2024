@@ -26,6 +26,12 @@ void Pneumatics::clench_v(int value) {
    clench.set_value(value);
 }
 
+int Pneumatics::clench_task() {
+   while (true) {
+      pneumatics.clench_control();
+      pros::delay(10);
+   } return 1;
+}
 
 void Pneumatics::doinker_control() {
   if (master.get_digital(DIGITAL_X)){
@@ -45,4 +51,11 @@ void Pneumatics::doinker_initialize() {
 
 void Pneumatics::doinker_v(int value) {
    doinker.set_value(value);
+}
+
+int Pneumatics::doinker_task() {
+   while (true) {
+      pneumatics.doinker_control();
+      pros::delay(10);
+   } return 1;
 }

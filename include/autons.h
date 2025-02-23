@@ -1,13 +1,11 @@
 #include "main.h"
 
 class Drive;
-class Neutral_Stake;
-class Intake;
+class Scoring_Mech;
 class Pneumatics;
 
 extern Drive chassis;
-extern Neutral_Stake neutral_stake;
-extern Intake intake;
+extern Scoring_Mech scoring_mech;
 extern Pneumatics pneumatics;
 
 void default_constants();
@@ -29,3 +27,4 @@ void blueLeftQual();
 void blueRightElim();
 void blueLeftElim();
 void skills();
+void auton_setup();

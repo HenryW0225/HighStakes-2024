@@ -14,5 +14,8 @@ class Pneumatics{
    void doinker_initialize();
    void doinker_control();
    void doinker_v(int value);
+
+   static int clench_task();
+   static int doinker_task();
    
 };

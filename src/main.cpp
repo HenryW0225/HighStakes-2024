@@ -3,7 +3,7 @@
 
 //Motor Definitions
 pros::adi::DigitalOut clench('A');
-pros::adi::DigitalOut climb('F');
+//pros::adi::DigitalOut climb('F');
 pros::adi::DigitalOut doinker('G');
 pros::Motor left_front_mtr(-1, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor left_middle_mtr(-4, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
@@ -12,8 +12,8 @@ pros::Motor right_front_mtr(20, pros::v5::MotorGears::blue, pros::v5::MotorUnits
 pros::Motor right_middle_mtr(3, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor right_back_mtr(6, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 
-pros::Optical color_sensor(11);
-bool driveControl = true;
+//pros::Optical color_sensor(11);
+//bool driveControl = true;
 Drive chassis( 
   //ZERO_TRACKER_NO_ODOM, ZERO_TRACKER_ODOM, TANK_ONE_ENCODER, TANK_ONE_ROTATION, TANK_TWO_ENCODER, TANK_TWO_ROTATION, HOLONOMIC_TWO_ENCODER, and HOLONOMIC_TWO_ROTATION
   TANK_TWO_ROTATION,
@@ -51,15 +51,14 @@ Drive chassis(
   2.6
 );
 
-Neutral_Stake neutral_stake(
-  {17, -10}, 
-  9
+Scoring_Mech scoring_mech(
+  {17, -10},
+  9,
+  {-8},
+  //{-8, 19},
+  11
 );
 
-Intake intake(
-  {-8}
-  //{-8, 19}
-);
 
 Pneumatics pneumatics(
 	{clench, doinker}
@@ -68,44 +67,13 @@ Pneumatics pneumatics(
 
 void initialize() {
 	chassis.initialize();
-	intake.initialize();
-  neutral_stake.initialize(); 
+  scoring_mech.initialize(); 
 	pneumatics.clench_initialize();
   pneumatics.doinker_initialize();
-  //pros::Task intake_task(color_sort_red);
-  //pros::Task intake_task(color_sort_blue);
-  
-}
-// use intake rotations
-int color_sort_red() { 
-  if (!driveControl){
-    color_sensor.set_led_pwm(100);
-    while (true) {
-      if ((color_sensor.get_hue() <= 225 and color_sensor.get_hue() >= 205) && (color_sensor.get_saturation() >= 0.5)) {
-        pros::delay(80);
-        intake.move(0);
-        pros::delay(350);
-        intake.move(600);
-      } pros::delay(0.1);
-    }
-  }
-  return 1;
+  pros::Task intake_task_1(Scoring_Mech::red_color_sort_task);
+  //pros::Task intake_task_2(Scoring_Mech::blue_color_sort_task);
 }
 
-int color_sort_blue() {
-  if (!driveControl){
-    color_sensor.set_led_pwm(100);
-    while (true) {
-      if ((color_sensor.get_hue() <= 30 or color_sensor.get_hue() >= 335) && (color_sensor.get_saturation() >= 0.56 ||color_sensor.get_saturation() <= 0.72)) {
-        pros::delay(145);
-        intake.move(0);
-        pros::delay(350);
-        intake.move(600);
-      } pros::delay(0.1);
-    }
-  }
-  return 1;
-}
 
 
 void competition_initialize() {}
@@ -113,21 +81,23 @@ void competition_initialize() {}
 void autonomous() {
   chassis.set_brake_mode('H');
   //driveControl=false;
-  redRightElim();
+  //auton_setup();
 }
 
 void opcontrol(void) {
   chassis.set_brake_mode('C');
-  neutral_stake.set_brake_mode('H'); 
-  // pros::Task neutral_stake_task(Neutral_Stake::neutral_stake_task);
-  // pros::Task intake_task(Intake::intake_task);
-  while (1) {
-    intake.intake_control();
-    neutral_stake.neutral_stake_control();
+  scoring_mech.set_brake_mode('H'); 
+  pros::Task neutral_stake_task(Scoring_Mech::neutral_stake_task);
+  pros::Task intake_task(Scoring_Mech::intake_task);
+  pros::Task pneumatics_clench_task(Pneumatics::clench_task);
+  pros::Task pneumatics_doinker_task(Pneumatics::doinker_task);
+  while (true) {
     chassis.arcade_control();
-    pneumatics.clench_control();
-    pneumatics.doinker_control();
-    driveControl=true;
+    //scoring_mech.neutral_stake_control();
+    //scoring_mech.intake_control();
+    //pneumatics.clench_control();
+    //pneumatics.doinker_control();
+    //driveControl=true;
     pros::delay(util::DELAY_TIME); 
   }
 }
