@@ -59,7 +59,7 @@ void Scoring_Mech::neutral_stake_control() {
             current_outtaking = 1;
             cout << "miving intake motors: " << intake_get_speed() << endl;
             intake_mtr.move_velocity(-200);
-            pros::delay(90);
+            pros::delay(150);
             cout << "miving intake motors: " << intake_get_speed() << endl;
             intake_mtr.move_velocity(0);
             pros::delay(100);
@@ -109,7 +109,14 @@ void Scoring_Mech::initialize() {
     current_outtaking = 0;
     neutral_stake_mtr.move_velocity(0);
     neutral_stake_rot.set_data_rate(5);
-    intake_mtr.set_brake_mode(MOTOR_BRAKE_BRAKE);
+
+    intake_mtr.move_velocity(0);
+    intake_mtr.set_zero_position(0);
+    intake_mtr.set_encoder_units_all(pros::v5::MotorUnits::counts);
+    intake_mtr.set_brake_mode(MOTOR_BRAKE_HOLD);
+    color_sensor.set_integration_time(5);
+    driveControl = false;
+    //color_sensor(11, 5);
     set_brake_mode('H');
 }
 
@@ -184,26 +191,20 @@ void Scoring_Mech::intake_move(double velocity) {
 // use intake rotations
 void Scoring_Mech::red_color_sort() { 
     color_sensor.set_led_pwm(100); 
-    //int current_rotation = 0;
-    while (true) {
-        //cout << color_sensor.get_hue() << " " << color_sensor.get_saturation() << " " << color_sensor.get_proximity() << endl;
-        //pros::delay(250);
-
-        if ((color_sensor.get_hue() <= 220 and color_sensor.get_hue() >= 215) and (color_sensor.get_saturation() <= 0.7 and color_sensor.get_saturation() >= 0.6) and color_sensor.get_proximity() >= 250) {
-            //current_rotation = intake_mtr.get_position();
-            //pros::delay(100);
-            intake_mtr.move_velocity(8);
-            
-            while (color_sensor.get_proximity() >= 250) {
-                //cout << intake_mtr.get_position() - current_rotation << endl;
-                pros::delay(0.1);
+    color_sensor.set_integration_time(5);
+    int current_rotation = 0;
+    while (!driveControl) {
+        if ((color_sensor.get_hue() <= 230 and color_sensor.get_hue() >= 210) and (color_sensor.get_saturation() <= 0.8 and color_sensor.get_saturation() >= 0.55) and color_sensor.get_proximity() >= 250) {
+            current_rotation = intake_mtr.get_position();
+            while (intake_mtr.get_position() - current_rotation < 375) {
+                pros::delay(5);
                 continue;
-            }
+            } 
             intake_mtr.move_velocity(0);
             pros::delay(500);
             intake_mtr.move_velocity(600);
         } 
-        pros::delay(1);
+        pros::delay(5);
     }
 }
 
@@ -213,14 +214,20 @@ int Scoring_Mech::red_color_sort_task() {
 }
   
 void Scoring_Mech::blue_color_sort() {
-    color_sensor.set_led_pwm(100);
-    while (true) {
-        if ((color_sensor.get_hue() <= 5 or color_sensor.get_hue() >= 350) && (color_sensor.get_saturation() >= 0.6)) {
-            pros::delay(71);
+    color_sensor.set_led_pwm(100); 
+    color_sensor.set_integration_time(5);
+    int current_rotation = 0;
+    while (!driveControl) {
+        if ((color_sensor.get_hue() <= 10 or color_sensor.get_hue() >= 350) && (color_sensor.get_saturation() >= 0.6) && color_sensor.get_proximity() >= 250) {
+            current_rotation = intake_mtr.get_position();
+            while (intake_mtr.get_position() - current_rotation < 385) {
+                pros::delay(5);
+                continue;
+            } 
             intake_mtr.move_velocity(0);
-            pros::delay(300);
+            pros::delay(500);
             intake_mtr.move_velocity(600);
-        } pros::delay(0.1);
+        } pros::delay(5);
     }
 }
 

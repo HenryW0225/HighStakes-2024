@@ -13,7 +13,7 @@ pros::Motor right_middle_mtr(3, pros::v5::MotorGears::blue, pros::v5::MotorUnits
 pros::Motor right_back_mtr(6, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 
 //pros::Optical color_sensor(11);
-//bool driveControl = true;
+//bool driveControl = false;
 Drive chassis( 
   //ZERO_TRACKER_NO_ODOM, ZERO_TRACKER_ODOM, TANK_ONE_ENCODER, TANK_ONE_ROTATION, TANK_TWO_ENCODER, TANK_TWO_ROTATION, HOLONOMIC_TWO_ENCODER, and HOLONOMIC_TWO_ROTATION
   TANK_TWO_ROTATION,
@@ -81,10 +81,11 @@ void competition_initialize() {}
 void autonomous() {
   chassis.set_brake_mode('H');
   //driveControl=false;
-  //auton_setup();
+  redLeftElim();
 }
 
 void opcontrol(void) {
+  scoring_mech.driveControl = true;
   chassis.set_brake_mode('C');
   scoring_mech.set_brake_mode('H'); 
   pros::Task neutral_stake_task(Scoring_Mech::neutral_stake_task);
@@ -93,11 +94,6 @@ void opcontrol(void) {
   pros::Task pneumatics_doinker_task(Pneumatics::doinker_task);
   while (true) {
     chassis.arcade_control();
-    //scoring_mech.neutral_stake_control();
-    //scoring_mech.intake_control();
-    //pneumatics.clench_control();
-    //pneumatics.doinker_control();
-    //driveControl=true;
     pros::delay(util::DELAY_TIME); 
   }
 }

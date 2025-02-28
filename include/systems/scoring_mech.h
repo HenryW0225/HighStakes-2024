@@ -2,12 +2,14 @@
 
 class Scoring_Mech{
     public:
+    bool driveControl = false;
     int neutral_stake_position = 0;
     int current_outtaking = 0;
     pros::MotorGroup neutral_stake_mtr;
     pros::Rotation neutral_stake_rot;
     pros::MotorGroup intake_mtr;
     pros::Optical color_sensor;
+    //pros::Optical color_sensor(const std::uint8_t port, double time);
     Scoring_Mech(std::initializer_list<std::int8_t> neutral_stake_mtr_grp, int8_t neutral_stake_rot_grp, std::initializer_list<std::int8_t> intake_mtr_grp, int8_t intake_color_sensor_grp);
     
     void initialize();
