@@ -557,7 +557,7 @@ int Drive::position_track_task(){
 }
 
 void Drive::calculate() {
-  pros::delay(1000);
+  //pros::delay(1000);
   while (true) {
     std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
     pros::delay(500);

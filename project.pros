@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "7 ring 2 top :)",
+    "project_name": "redLeftQual",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -256,7 +256,7 @@
     },
     "upload_options": {
       "description": "Coming Soon",
-      "slot": 2
+      "slot": 3
     },
     "use_early_access": false
   }

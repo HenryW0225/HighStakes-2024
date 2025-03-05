@@ -16,7 +16,7 @@ void Scoring_Mech::neutral_stake_control() {
     
     int LOADING_DOWN_ACCURATE_VELOCITY = 100;
     int LOADING_DOWN_FULL_VELOCITY = 600;
-    double LOADING_DOWN_ANGLE_TRESHOLD = 1600; 
+    double LOADING_DOWN_ANGLE_TRESHOLD = 1800; 
     double SAFE_ANGLE_DOWN = 27000;
     double DESCORE_ANGLE = 23000;
 
@@ -57,10 +57,10 @@ void Scoring_Mech::neutral_stake_control() {
     else if (master.get_digital(DIGITAL_B)) {
         if (neutral_stake_position == 1){
             current_outtaking = 1;
-            cout << "miving intake motors: " << intake_get_speed() << endl;
+            //cout << "miving intake motors: " << intake_get_speed() << endl;
             intake_mtr.move_velocity(-200);
-            pros::delay(150);
-            cout << "miving intake motors: " << intake_get_speed() << endl;
+            pros::delay(180);
+            //cout << "miving intake motors: " << intake_get_speed() << endl;
             intake_mtr.move_velocity(0);
             pros::delay(100);
             neutral_stake_position = 0;
@@ -74,10 +74,10 @@ void Scoring_Mech::neutral_stake_control() {
     else if (master.get_digital(DIGITAL_R2)) {
         if (neutral_stake_position == 1){
             current_outtaking = 1;
-            cout << "miving intake motors: " << intake_get_speed() << endl;
+            //cout << "miving intake motors: " << intake_get_speed() << endl;
             intake_mtr.move_velocity(-200);
             pros::delay(90);
-            cout << "miving intake motors: " << intake_get_speed() << endl;
+            //cout << "miving intake motors: " << intake_get_speed() << endl;
             intake_mtr.move_velocity(0);
             pros::delay(100);
             neutral_stake_position = 0;
@@ -193,18 +193,23 @@ void Scoring_Mech::red_color_sort() {
     color_sensor.set_led_pwm(100); 
     color_sensor.set_integration_time(5);
     int current_rotation = 0;
-    while (!driveControl) {
-        if ((color_sensor.get_hue() <= 230 and color_sensor.get_hue() >= 210) and (color_sensor.get_saturation() <= 0.8 and color_sensor.get_saturation() >= 0.55) and color_sensor.get_proximity() >= 250) {
-            current_rotation = intake_mtr.get_position();
-            while (intake_mtr.get_position() - current_rotation < 375) {
-                pros::delay(5);
-                continue;
+    while (true) {
+        while (!driveControl) {
+            if ((color_sensor.get_hue() <= 230 and color_sensor.get_hue() >= 210) && (color_sensor.get_saturation() <= 0.8 and color_sensor.get_saturation() >= 0.55) && color_sensor.get_proximity() >= 250) {
+                current_rotation = intake_mtr.get_position();
+                while (intake_mtr.get_position() - current_rotation < 385) {
+                    pros::delay(5);
+                    continue;
+                } 
+                current_outtaking = 1;
+                intake_mtr.move_velocity(0);
+                pros::delay(500);
+                intake_mtr.move_velocity(600);
+                current_outtaking = 0; 
             } 
-            intake_mtr.move_velocity(0);
-            pros::delay(500);
-            intake_mtr.move_velocity(600);
-        } 
-        pros::delay(5);
+            pros::delay(5);
+        }
+        pros::delay(20);
     }
 }
 
@@ -217,17 +222,23 @@ void Scoring_Mech::blue_color_sort() {
     color_sensor.set_led_pwm(100); 
     color_sensor.set_integration_time(5);
     int current_rotation = 0;
-    while (!driveControl) {
-        if ((color_sensor.get_hue() <= 10 or color_sensor.get_hue() >= 350) && (color_sensor.get_saturation() >= 0.6) && color_sensor.get_proximity() >= 250) {
-            current_rotation = intake_mtr.get_position();
-            while (intake_mtr.get_position() - current_rotation < 385) {
-                pros::delay(5);
-                continue;
+    while (true) {
+        while (!driveControl) {
+            if ((color_sensor.get_hue() <= 10 or color_sensor.get_hue() >= 350) && (color_sensor.get_saturation() >= 0.6) && color_sensor.get_proximity() >= 250) {
+                current_rotation = intake_mtr.get_position();
+                while (intake_mtr.get_position() - current_rotation < 375) {
+                    pros::delay(5);
+                    continue;
+                } 
+                current_outtaking = 1;
+                intake_mtr.move_velocity(0);
+                pros::delay(500);
+                intake_mtr.move_velocity(600);
+                current_outtaking = 0;
             } 
-            intake_mtr.move_velocity(0);
-            pros::delay(500);
-            intake_mtr.move_velocity(600);
-        } pros::delay(5);
+            pros::delay(5);
+        }
+        pros::delay(20);
     }
 }
 
@@ -236,7 +247,61 @@ int Scoring_Mech::blue_color_sort_task() {
     return 1;
 }
 
+void Scoring_Mech::driveControl_changer() {
+    while (true) {
+        if (master.get_digital(DIGITAL_UP)) {
+            if (scoring_mech.driveControl) {
+                cout << 1 << endl;
+                scoring_mech.driveControl = false;
+            } else {
+                cout << 2 << endl;
+                scoring_mech.driveControl = true;
+            } pros::delay(500);
+        }
+        pros::delay(20);
+    }
+}
 
+int Scoring_Mech::driveControl_changer_task() {
+    scoring_mech.driveControl_changer();
+    return 1;
+}
+
+/*void Scoring_Mech::neutral_stake_stopper() {
+    cout << 108 << endl;
+    pros::delay(2000);
+    while (true) {
+        //cout << neutral_stake_mtr.get_actual_velocity() << endl;
+        if (neutral_stake_rot.get_angle() > 34000 || neutral_stake_rot.get_angle() < 1000) {
+            //cout << "Hello" << endl;
+            //pros::delay(2000);
+            if (neutral_stake_mtr.get_actual_velocity() > 0) {
+                neutral_stake_mtr.move_velocity(0);
+                pros::delay(5);
+            } else {
+                pros::delay(20);
+            }
+        }
+    }
+}
+
+int Scoring_Mech::neutral_stake_stopper_task() {
+    scoring_mech.neutral_stake_stopper();
+    return 1;
+}*/
+
+void Scoring_Mech::rush_helper() {
+    scoring_mech.move2(400);
+    pros::delay(200);
+    scoring_mech.intake_move(600);
+    pros::delay(200);
+    scoring_mech.move2(0);
+}
+
+int Scoring_Mech::rush_helper_task() {
+    scoring_mech.rush_helper();
+    return 1;
+}
 
 
 

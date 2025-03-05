@@ -27,7 +27,13 @@ class Scoring_Mech{
     void intake_move(double velocity);
 
 
-    static int neutral_stake_task();
+    static int rush_helper_task();
+    void rush_helper();
+    static int driveControl_changer_task();
+    void driveControl_changer();
+    static int neutral_stake_stopper_task();
+    void neutral_stake_stopper();
+    static int neutral_stake_task(); 
     static int intake_task();
     static int red_color_sort_task();
     void red_color_sort();

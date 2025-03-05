@@ -56,7 +56,7 @@ Scoring_Mech scoring_mech(
   9,
   {-8},
   //{-8, 19},
-  11
+  14
 );
 
 
@@ -70,6 +70,7 @@ void initialize() {
   scoring_mech.initialize(); 
 	pneumatics.clench_initialize();
   pneumatics.doinker_initialize();
+  //pros::Task neutral_stake_task(Scoring_Mech::neutral_stake_stopper_task);
   pros::Task intake_task_1(Scoring_Mech::red_color_sort_task);
   //pros::Task intake_task_2(Scoring_Mech::blue_color_sort_task);
 }
@@ -88,7 +89,8 @@ void opcontrol(void) {
   scoring_mech.driveControl = true;
   chassis.set_brake_mode('C');
   scoring_mech.set_brake_mode('H'); 
-  pros::Task neutral_stake_task(Scoring_Mech::neutral_stake_task);
+  pros::Task neutral_stake_task_1(Scoring_Mech::driveControl_changer_task);
+  pros::Task neutral_stake_task_2(Scoring_Mech::neutral_stake_task);
   pros::Task intake_task(Scoring_Mech::intake_task);
   pros::Task pneumatics_clench_task(Pneumatics::clench_task);
   pros::Task pneumatics_doinker_task(Pneumatics::doinker_task);
@@ -98,3 +100,7 @@ void opcontrol(void) {
   }
 }
 void disabled() {}
+
+
+
+
