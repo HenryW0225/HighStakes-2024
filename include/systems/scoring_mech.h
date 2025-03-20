@@ -2,7 +2,6 @@
 
 class Scoring_Mech{
     public:
-    bool driveControl = false;
     int neutral_stake_position = 0;
     int current_outtaking = 0;
     pros::MotorGroup neutral_stake_mtr;
@@ -17,6 +16,7 @@ class Scoring_Mech{
     void neutral_stake_control();
     void move1();
     void move2(double velocity);
+    void move3(int timeout, int velocity);
     void set_brake_mode(char brake_type);
     double neutral_stake_get_speed();
     void set_up();

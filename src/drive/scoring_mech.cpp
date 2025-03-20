@@ -10,13 +10,13 @@ Scoring_Mech::Scoring_Mech(std::initializer_list<std::int8_t> neutral_stake_mtr_
 
 void Scoring_Mech::neutral_stake_control() {
     double LOADING_ANGLE = 32800;
-    double LOADING_UP_ANGLE_TRESHOLD = 1200;
+    double LOADING_UP_ANGLE_TRESHOLD = 950;
     int LOADING_UP_VELOCITY = 100;
     int LOADING_UP_FULL_VELOCITY = 400;
     
     int LOADING_DOWN_ACCURATE_VELOCITY = 100;
     int LOADING_DOWN_FULL_VELOCITY = 600;
-    double LOADING_DOWN_ANGLE_TRESHOLD = 1800; 
+    double LOADING_DOWN_ANGLE_TRESHOLD = 2000; 
     double SAFE_ANGLE_DOWN = 27000;
     double DESCORE_ANGLE = 23000;
 
@@ -24,7 +24,7 @@ void Scoring_Mech::neutral_stake_control() {
         neutral_stake_position = 1;
         int timeout = 0;
         if (neutral_stake_rot.get_angle() > LOADING_ANGLE + LOADING_UP_ANGLE_TRESHOLD 
-                || neutral_stake_rot.get_angle() < LOADING_UP_ANGLE_TRESHOLD) {
+                || neutral_stake_rot.get_angle() < 5000) {
             timeout = 0;
             while ((neutral_stake_rot.get_angle() > LOADING_ANGLE + LOADING_UP_ANGLE_TRESHOLD 
                     || neutral_stake_rot.get_angle() < LOADING_UP_ANGLE_TRESHOLD)
@@ -102,6 +102,33 @@ int Scoring_Mech::neutral_stake_task() {
     return 1;
 }
 
+void Scoring_Mech::move3(int max_timeout, int velocity)
+{
+    double LOADING_ANGLE = 33400;
+    double LOADING_UP_ANGLE_TRESHOLD = 950;
+    int LOADING_UP_VELOCITY = 200;
+    int LOADING_UP_FULL_VELOCITY = 500;
+    
+    int LOADING_DOWN_ACCURATE_VELOCITY = 100;
+    int LOADING_DOWN_FULL_VELOCITY = 600;
+    double LOADING_DOWN_ANGLE_TRESHOLD = 2000; 
+    double SAFE_ANGLE_DOWN = 27000;
+    double DESCORE_ANGLE = 23000;
+    int timeout = 0;
+    if (neutral_stake_rot.get_angle() > 18000 + LOADING_UP_ANGLE_TRESHOLD ||
+                 neutral_stake_rot.get_angle() < LOADING_UP_ANGLE_TRESHOLD) {
+            timeout = 0;
+            while ((neutral_stake_rot.get_angle() > 18000 + LOADING_UP_ANGLE_TRESHOLD  ||
+                     neutral_stake_rot.get_angle() < LOADING_UP_ANGLE_TRESHOLD)
+                    && (timeout < max_timeout)) {
+                neutral_stake_mtr.move_velocity(-1 * velocity);
+                pros::delay(10);
+                timeout += 10;
+            }
+        } 
+    neutral_stake_mtr.move_velocity(0);
+}
+
 void Scoring_Mech::initialize() {
     neutral_stake_rot.reset_position();
     neutral_stake_rot.reset();
@@ -113,15 +140,38 @@ void Scoring_Mech::initialize() {
     intake_mtr.move_velocity(0);
     intake_mtr.set_zero_position(0);
     intake_mtr.set_encoder_units_all(pros::v5::MotorUnits::counts);
-    intake_mtr.set_brake_mode(MOTOR_BRAKE_HOLD);
+    intake_mtr.set_brake_mode(MOTOR_BRAKE_COAST);
+    neutral_stake_mtr.set_brake_mode(MOTOR_BRAKE_HOLD);
     color_sensor.set_integration_time(5);
-    driveControl = false;
+    color_sensor.set_led_pwm(100);
     //color_sensor(11, 5);
     set_brake_mode('H');
 }
 
 void Scoring_Mech::move1() {
-
+    double LOADING_ANGLE = 32800;
+    double LOADING_UP_ANGLE_TRESHOLD = 950;
+    int LOADING_UP_VELOCITY = 100;
+    int LOADING_UP_FULL_VELOCITY = 400;
+    
+    int LOADING_DOWN_ACCURATE_VELOCITY = 100;
+    int LOADING_DOWN_FULL_VELOCITY = 600;
+    double LOADING_DOWN_ANGLE_TRESHOLD = 2000; 
+    double SAFE_ANGLE_DOWN = 27000;
+    double DESCORE_ANGLE = 23000;
+    int timeout = 0;
+        if (neutral_stake_rot.get_angle() > LOADING_ANGLE + LOADING_UP_ANGLE_TRESHOLD 
+                || neutral_stake_rot.get_angle() < 5000) {
+            timeout = 0;
+            while ((neutral_stake_rot.get_angle() > LOADING_ANGLE + LOADING_UP_ANGLE_TRESHOLD 
+                    || neutral_stake_rot.get_angle() < LOADING_UP_ANGLE_TRESHOLD)
+                    && (timeout < 3000)) {
+                neutral_stake_mtr.move_velocity(-LOADING_UP_VELOCITY);
+                pros::delay(10);
+                timeout += 10;
+            }
+        }
+        neutral_stake_mtr.move_velocity(0);
 }
 
 void Scoring_Mech::move2(double voltage) {
@@ -191,25 +241,23 @@ void Scoring_Mech::intake_move(double velocity) {
 // use intake rotations
 void Scoring_Mech::red_color_sort() { 
     color_sensor.set_led_pwm(100); 
+    pros::delay(500);
     color_sensor.set_integration_time(5);
     int current_rotation = 0;
     while (true) {
-        while (!driveControl) {
-            if ((color_sensor.get_hue() <= 230 and color_sensor.get_hue() >= 210) && (color_sensor.get_saturation() <= 0.8 and color_sensor.get_saturation() >= 0.55) && color_sensor.get_proximity() >= 250) {
-                current_rotation = intake_mtr.get_position();
-                while (intake_mtr.get_position() - current_rotation < 385) {
-                    pros::delay(5);
-                    continue;
-                } 
-                current_outtaking = 1;
-                intake_mtr.move_velocity(0);
-                pros::delay(500);
-                intake_mtr.move_velocity(600);
-                current_outtaking = 0; 
+        if ((color_sensor.get_hue() <= 230 and color_sensor.get_hue() >= 210) && (color_sensor.get_saturation() <= 0.8 and color_sensor.get_saturation() >= 0.55) && color_sensor.get_proximity() >= 250) {
+            current_rotation = intake_mtr.get_position();
+            while (intake_mtr.get_position() - current_rotation < 405) {
+                pros::delay(5);
+                continue;
             } 
-            pros::delay(5);
-        }
-        pros::delay(20);
+            current_outtaking = 1;
+            intake_mtr.move_velocity(0);
+            pros::delay(500);
+            intake_mtr.move_velocity(600);
+            current_outtaking = 0; 
+        } 
+        pros::delay(5);
     }
 }
 
@@ -220,25 +268,23 @@ int Scoring_Mech::red_color_sort_task() {
   
 void Scoring_Mech::blue_color_sort() {
     color_sensor.set_led_pwm(100); 
+    pros::delay(500);
     color_sensor.set_integration_time(5);
     int current_rotation = 0;
     while (true) {
-        while (!driveControl) {
-            if ((color_sensor.get_hue() <= 10 or color_sensor.get_hue() >= 350) && (color_sensor.get_saturation() >= 0.6) && color_sensor.get_proximity() >= 250) {
-                current_rotation = intake_mtr.get_position();
-                while (intake_mtr.get_position() - current_rotation < 375) {
-                    pros::delay(5);
-                    continue;
-                } 
-                current_outtaking = 1;
-                intake_mtr.move_velocity(0);
-                pros::delay(500);
-                intake_mtr.move_velocity(600);
-                current_outtaking = 0;
+        if ((color_sensor.get_hue() <= 10 or color_sensor.get_hue() >= 350) && (color_sensor.get_saturation() >= 0.6) && color_sensor.get_proximity() >= 250) {
+            current_rotation = intake_mtr.get_position();
+            while (intake_mtr.get_position() - current_rotation < 375) {
+                pros::delay(5);
+                continue;
             } 
-            pros::delay(5);
-        }
-        pros::delay(20);
+            current_outtaking = 1;
+            intake_mtr.move_velocity(0);
+            pros::delay(500);
+            intake_mtr.move_velocity(600);
+            current_outtaking = 0;
+        } 
+        pros::delay(5);
     }
 }
 
@@ -248,15 +294,16 @@ int Scoring_Mech::blue_color_sort_task() {
 }
 
 void Scoring_Mech::driveControl_changer() {
+    color_sensor.set_led_pwm(0);
+    pros::delay(500);
     while (true) {
         if (master.get_digital(DIGITAL_UP)) {
-            if (scoring_mech.driveControl) {
-                cout << 1 << endl;
-                scoring_mech.driveControl = false;
+            if (color_sensor.get_led_pwm() < 50) {
+                color_sensor.set_led_pwm(100);
             } else {
-                cout << 2 << endl;
-                scoring_mech.driveControl = true;
-            } pros::delay(500);
+                color_sensor.set_led_pwm(0);
+            }
+            pros::delay(500);
         }
         pros::delay(20);
     }

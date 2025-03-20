@@ -559,6 +559,8 @@ int Drive::position_track_task(){
 void Drive::calculate() {
   //pros::delay(1000);
   while (true) {
+    //printf("Position %f - %f - %f", chassis.get_X_position(), chassis.get_Y_position(), chassis.get_absolute_heading());
+    
     std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
     pros::delay(500);
   } 

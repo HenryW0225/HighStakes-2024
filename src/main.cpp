@@ -5,12 +5,13 @@
 pros::adi::DigitalOut clench('A');
 //pros::adi::DigitalOut climb('F');
 pros::adi::DigitalOut doinker('G');
-pros::Motor left_front_mtr(-1, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+pros::Motor left_front_mtr(-11, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor left_middle_mtr(-4, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor left_back_mtr(-7, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor right_front_mtr(20, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor right_middle_mtr(3, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor right_back_mtr(6, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
+
 
 //pros::Optical color_sensor(11);
 //bool driveControl = false;
@@ -53,10 +54,10 @@ Drive chassis(
 
 Scoring_Mech scoring_mech(
   {17, -10},
-  9,
+  15,
   {-8},
   //{-8, 19},
-  14
+  13
 );
 
 
@@ -82,11 +83,10 @@ void competition_initialize() {}
 void autonomous() {
   chassis.set_brake_mode('H');
   //driveControl=false;
-  redLeftElim();
+  test();
 }
 
 void opcontrol(void) {
-  scoring_mech.driveControl = true;
   chassis.set_brake_mode('C');
   scoring_mech.set_brake_mode('H'); 
   pros::Task neutral_stake_task_1(Scoring_Mech::driveControl_changer_task);

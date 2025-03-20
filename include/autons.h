@@ -28,3 +28,4 @@ void blueRightElim();
 void blueLeftElim();
 void skills();
 void auton_setup();
+void test();
