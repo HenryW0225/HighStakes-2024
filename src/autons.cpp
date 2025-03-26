@@ -66,28 +66,12 @@ void odom_test(){
     text = new char[16];
     std::sprintf(text, "Heading: %f", chassis.get_absolute_heading());
     pros::screen::print(TEXT_MEDIUM, 0, 90, text);
-    //delete [] text;
-    //text = new char[16];
-    //std::sprintf(text, "ForwardTracker: %f", chassis.get_ForwardTracker_position());
-    //pros::screen::print(TEXT_MEDIUM, 0, 110, text);
-    /*delete [] text;
-    text = new char[16];
-    std::sprintf(text, "SidewaysTracker: %f", chassis.get_SidewaysTracker_position());
-    pros::screen::print(TEXT_MEDIUM, 0, 130, text);
-    pros::delay(20);*/
   }
 }
 
 void tank_odom_test(){
   default_constants();
   chassis.set_coordinates(0, 0, 0);
-
-  //chassis.turn_to_point(24, 0, 1, 5);
-  //std::cout << "X: " << chassis.get_X_position() << " Y: " << chassis.get_Y_position() << " H: " << chassis.get_absolute_heading() << std::endl;
-  //while (true) {
-    //std::cout << "X: " << chassis.get_X_position() << " Y: " << chassis.get_Y_position() << " H: " << chassis.get_absolute_heading() << std::endl;
-    //pros::delay(200);
-  //}
   
   chassis.turn_to_point(24, 0);
   pros::delay(500);
@@ -127,7 +111,10 @@ void test() {
   default_constants();
   chassis.set_coordinates(0, 0, 0);
   pros::delay(1000);
-  chassis.turn_to_point(24, 0);
+  //scoring_mech.intake_move(600);
+  //pros::delay(10000);
+  chassis.turn_to_point(24, 0, 0, 3, 2, 50, 5000);
+  chassis.calculate();
   //chassis.drive_to_point(0, 24, 8, 0, 1, 50, 1200);
   //chassis.drive_to_point(0, 96, 8, 0, 1, 50, 3000);
   /*chassis.turn_to_point(-96, 96, 1, 8, 1, 50, 2500);

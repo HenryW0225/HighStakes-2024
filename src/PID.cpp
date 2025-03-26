@@ -1,6 +1,7 @@
 #pragma once
 #ifndef _USER_PID_HPP
 #include "main.h"
+using namespace std;
 
 PID::PID(float error, float kp, float ki, float kd, float starti) :
   error(error),
@@ -21,7 +22,7 @@ PID::PID(float error, float kp, float ki, float kd, float starti, float settle_e
   timeout(timeout)
 {};
 
-float PID:: compute(float error){
+float PID::compute(float error){
   if (fabs(error) < starti){ // StartI is used to prevent integral windup.
     accumulated_error+=error;
   }
@@ -48,10 +49,12 @@ float PID:: compute(float error){
 
 bool PID::is_settled(){
   if (time_spent_running>timeout && timeout != 0){
+    cout << "bad" << endl;
     return(true);
   } // If timeout does equal 0, the move will never actually time out. Setting timeout to 0 is the 
     // equivalent of setting it to infinity.
   if (time_spent_settled>settle_time){
+    cout << "good" << endl;
     return(true);
   }
   return(false);

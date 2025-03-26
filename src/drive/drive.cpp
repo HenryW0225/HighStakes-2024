@@ -2,6 +2,8 @@
 #define MOVING_VOLTAGE 25
 float PII = 3.14159265359;
 float GYRO_SCALE;
+using namespace std;
+
 
 Drive::Drive(enum::drive_setup_enum drive_setup, std::initializer_list<std::int8_t> DriveL, std::initializer_list<std::int8_t> DriveR, int gyro_port, float wheel_diameter, float wheel_ratio, float gyro_scale, int ForwardTracker_port, float ForwardTracker_diameter, float ForwardTracker_center_distance, int SidewaysTracker_port, float SidewaysTracker_diameter, float SidewaysTracker_center_distance) 
   : DriveL(DriveL),
@@ -196,7 +198,6 @@ void Drive::set_swing_exit_conditions(float swing_settle_error, float swing_sett
 }
 
 float Drive::get_absolute_heading(){
-  //std::cout << Gyro.get_heading() << std::endl;
   return Gyro.get_heading();
   //return(reduce_0_to_360(Gyro.get_rotation() * (360.0/358))); 
 }
@@ -418,7 +419,6 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
     // The drive error is just equal to the distance between the current and desired points.
     float drive_output = drivePID.compute(drive_error);
     drive_output = clamp(drive_output, drive_max_voltage, drive_max_voltage);
-    //std::cout << "E: " << drive_error << " O: " << drive_output << std::endl;
     drive_with_voltage(drive_output, drive_output);
     pros::Task::delay(10);
   }
@@ -429,7 +429,7 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
 }
 
 void Drive::drive_to_point(float X_position, float Y_position, float drive_max_voltage, float heading_max_voltage, float drive_settle_error, float drive_settle_time, float drive_timeout, float drive_kp, float drive_ki, float drive_kd, float drive_starti, float heading_kp, float heading_ki, float heading_kd, float heading_starti){
-  std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
+  //std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
   PID drivePID(hypot(X_position-get_X_position(),Y_position-get_Y_position()), drive_kp, drive_ki, drive_kd, drive_starti, drive_settle_error, drive_settle_time, drive_timeout);
   PID headingPID(reduce_negative_180_to_180(to_deg(atan2(X_position-get_X_position(),Y_position-get_Y_position()))-get_absolute_heading()), heading_kp, heading_ki, heading_kd, heading_starti);
   while(drivePID.is_settled() == false){
@@ -454,10 +454,6 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
 
     drive_output = clamp(drive_output, -fabs(heading_scale_factor)-drive_max_voltage, fabs(heading_scale_factor)+drive_max_voltage);
     heading_output = clamp(heading_output, -heading_max_voltage, heading_max_voltage);
-    //std::cout << drive_output + heading_output << " " << drive_output - heading_output << " " << get_absolute_heading() << std::endl; 
-    //if (drive_output < 0) {
-      //drive_output = 0;
-    //}
     drive_with_voltage(drive_output+heading_output, drive_output-heading_output);
     pros::Task::delay(10);
   }
@@ -466,7 +462,7 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
   DriveR.brake();
   DriveL.set_brake_mode(MOTOR_BRAKE_HOLD);
   DriveL.brake();
-  std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
+  //std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
 }
 
 void Drive::turn_to_point(float X_position, float Y_position){
@@ -484,9 +480,8 @@ void Drive::turn_to_point(float X_position, float Y_position, float extra_angle_
 void Drive::turn_to_point(float X_position, float Y_position, float extra_angle_deg, float turn_max_voltage, float turn_settle_error, float turn_settle_time, float turn_timeout, float turn_kp, float turn_ki, float turn_kd, float turn_starti){
   PID turnPID(reduce_negative_180_to_180(to_deg(atan2(X_position-get_X_position(),Y_position-get_Y_position())) - get_absolute_heading()), turn_kp, turn_ki, turn_kd, turn_starti, turn_settle_error, turn_settle_time, turn_timeout);
   while(turnPID.is_settled() == false){
-    //std::cout << "X: " << chassis.get_X_position() << " Y: " << chassis.get_Y_position() << " H: " << chassis.get_absolute_heading() << std::endl;
-    //std::cout << "Odom_x: " << chassis.R_SidewaysTracker.get_angle() << std::endl;
     float error = reduce_negative_180_to_180(to_deg(atan2(X_position-get_X_position(),Y_position-get_Y_position())) - get_absolute_heading() + extra_angle_deg);
+    //cout << error << endl;
     // Again, using atan2(x,y) puts 0 degrees on the positive Y axis.
     float output = turnPID.compute(error);
     output = clamp(output, -turn_max_voltage, turn_max_voltage);
@@ -498,7 +493,8 @@ void Drive::turn_to_point(float X_position, float Y_position, float extra_angle_
   DriveL.brake();
   DriveR.set_brake_mode(MOTOR_BRAKE_HOLD);
   DriveR.brake();
-  std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
+  std::cout << get_ForwardTracker_position() << " " << get_SidewaysTracker_position << std::endl;
+  //std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
 }
 
 void Drive::left_swing_to_point(float X_position, float Y_position){
@@ -557,11 +553,11 @@ int Drive::position_track_task(){
 }
 
 void Drive::calculate() {
-  //pros::delay(1000);
   while (true) {
-    //printf("Position %f - %f - %f", chassis.get_X_position(), chassis.get_Y_position(), chassis.get_absolute_heading());
-    
-    std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
+    /*if (master.get_digital(DIGITAL_LEFT)) {
+      cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << endl;
+    }*/
+    cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << endl;
     pros::delay(500);
   } 
 }
