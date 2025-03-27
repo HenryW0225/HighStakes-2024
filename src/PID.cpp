@@ -51,8 +51,8 @@ bool PID::is_settled(){
   if (time_spent_running>timeout && timeout != 0){
     cout << "bad" << endl;
     return(true);
-  } // If timeout does equal 0, the move will never actually time out. Setting timeout to 0 is the 
-    // equivalent of setting it to infinity.
+  }
+  
   if (time_spent_settled>settle_time){
     cout << "good" << endl;
     return(true);

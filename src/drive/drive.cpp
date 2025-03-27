@@ -113,6 +113,8 @@ DriveR.move_voltage(rightMotorVoltage);
 }
 
 void Drive::initialize() {
+ R_ForwardTracker.reset_position();
+ R_SidewaysTracker.reset_position();
  imu_calibrate();
  reset_drive_sensor();
  set_brake_mode('H');
@@ -478,10 +480,11 @@ void Drive::turn_to_point(float X_position, float Y_position, float extra_angle_
 }
 
 void Drive::turn_to_point(float X_position, float Y_position, float extra_angle_deg, float turn_max_voltage, float turn_settle_error, float turn_settle_time, float turn_timeout, float turn_kp, float turn_ki, float turn_kd, float turn_starti){
+  std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
   PID turnPID(reduce_negative_180_to_180(to_deg(atan2(X_position-get_X_position(),Y_position-get_Y_position())) - get_absolute_heading()), turn_kp, turn_ki, turn_kd, turn_starti, turn_settle_error, turn_settle_time, turn_timeout);
   while(turnPID.is_settled() == false){
     float error = reduce_negative_180_to_180(to_deg(atan2(X_position-get_X_position(),Y_position-get_Y_position())) - get_absolute_heading() + extra_angle_deg);
-    //cout << error << endl;
+    cout << error << endl;
     // Again, using atan2(x,y) puts 0 degrees on the positive Y axis.
     float output = turnPID.compute(error);
     output = clamp(output, -turn_max_voltage, turn_max_voltage);
@@ -493,8 +496,8 @@ void Drive::turn_to_point(float X_position, float Y_position, float extra_angle_
   DriveL.brake();
   DriveR.set_brake_mode(MOTOR_BRAKE_HOLD);
   DriveR.brake();
-  std::cout << get_ForwardTracker_position() << " " << get_SidewaysTracker_position << std::endl;
-  //std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
+  std::cout << R_ForwardTracker.get_position() << " " << R_SidewaysTracker.get_position() << endl;
+  std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
 }
 
 void Drive::left_swing_to_point(float X_position, float Y_position){

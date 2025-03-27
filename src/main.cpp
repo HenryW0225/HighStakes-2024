@@ -1,5 +1,5 @@
 #include "main.h"
-#include <iostream>
+#include <iostream> 
 
 //Motor Definitions
 pros::adi::DigitalOut clench('A');
@@ -49,7 +49,7 @@ Drive chassis(
   //Sideways tracker diameter (reverse to make the direction switch):
   2,
   //Sideways tracker center distance (positive distance is behind the center of the robot, negative is in front):
-  2.6
+  2.25
 );
 
 Scoring_Mech scoring_mech(
