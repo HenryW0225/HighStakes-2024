@@ -142,9 +142,11 @@ void Drive::reset_gyro() {
 }
 
 void Drive::drive_with_voltage(float leftVoltage, float rightVoltage){
+  //cout << chassis.get_absolute_heading() << " " << R_SidewaysTracker.get_position() << " " <<  R_ForwardTracker.get_position() << endl;
   if (fabs(leftVoltage) < 0.1 && fabs(rightVoltage) < 0.1) return;
   DriveL.move_voltage(leftVoltage * 1000);
   DriveR.move_voltage(rightVoltage * 1000);
+  //cout << chassis.get_absolute_heading() << " " << R_SidewaysTracker.get_position() << " " <<  R_ForwardTracker.get_position() << endl;
 }
 
 //Set PID constants
@@ -431,7 +433,7 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
 }
 
 void Drive::drive_to_point(float X_position, float Y_position, float drive_max_voltage, float heading_max_voltage, float drive_settle_error, float drive_settle_time, float drive_timeout, float drive_kp, float drive_ki, float drive_kd, float drive_starti, float heading_kp, float heading_ki, float heading_kd, float heading_starti){
-  //std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
+  std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
   PID drivePID(hypot(X_position-get_X_position(),Y_position-get_Y_position()), drive_kp, drive_ki, drive_kd, drive_starti, drive_settle_error, drive_settle_time, drive_timeout);
   PID headingPID(reduce_negative_180_to_180(to_deg(atan2(X_position-get_X_position(),Y_position-get_Y_position()))-get_absolute_heading()), heading_kp, heading_ki, heading_kd, heading_starti);
   while(drivePID.is_settled() == false){
@@ -464,7 +466,7 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
   DriveR.brake();
   DriveL.set_brake_mode(MOTOR_BRAKE_HOLD);
   DriveL.brake();
-  //std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
+  std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
 }
 
 void Drive::turn_to_point(float X_position, float Y_position){
@@ -484,7 +486,7 @@ void Drive::turn_to_point(float X_position, float Y_position, float extra_angle_
   PID turnPID(reduce_negative_180_to_180(to_deg(atan2(X_position-get_X_position(),Y_position-get_Y_position())) - get_absolute_heading()), turn_kp, turn_ki, turn_kd, turn_starti, turn_settle_error, turn_settle_time, turn_timeout);
   while(turnPID.is_settled() == false){
     float error = reduce_negative_180_to_180(to_deg(atan2(X_position-get_X_position(),Y_position-get_Y_position())) - get_absolute_heading() + extra_angle_deg);
-    cout << error << endl;
+    //cout << error << endl;
     // Again, using atan2(x,y) puts 0 degrees on the positive Y axis.
     float output = turnPID.compute(error);
     output = clamp(output, -turn_max_voltage, turn_max_voltage);
@@ -496,7 +498,7 @@ void Drive::turn_to_point(float X_position, float Y_position, float extra_angle_
   DriveL.brake();
   DriveR.set_brake_mode(MOTOR_BRAKE_HOLD);
   DriveR.brake();
-  std::cout << R_ForwardTracker.get_position() << " " << R_SidewaysTracker.get_position() << endl;
+  //std::cout << R_ForwardTracker.get_position() << " " << R_SidewaysTracker.get_position() << endl;
   std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
 }
 

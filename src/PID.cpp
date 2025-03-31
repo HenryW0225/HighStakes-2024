@@ -22,17 +22,10 @@ PID::PID(float error, float kp, float ki, float kd, float starti, float settle_e
   timeout(timeout)
 {};
 
-float PID::compute(float error){
-  if (fabs(error) < starti){ // StartI is used to prevent integral windup.
-    accumulated_error+=error;
-  }
-  if ((error>0 && previous_error<0)||(error<0 && previous_error>0)){ 
-    accumulated_error = 0; 
-  } // This if statement checks if the error has crossed 0, and if it has, it eliminates the integral term.
-
+float PID::compute(float error) {
   output = kp*error + ki*accumulated_error + kd*(error-previous_error);
-
-  previous_error=error;
+  
+  previous_error = error;
 
   if(fabs(error)<settle_error){
     time_spent_settled+=10;
@@ -41,9 +34,7 @@ float PID::compute(float error){
   }
 
   time_spent_running+=10;
-  //if (output < 2) {
-    //output = 2;
-  //}
+  
   return output;
 }
 
@@ -52,7 +43,7 @@ bool PID::is_settled(){
     cout << "bad" << endl;
     return(true);
   }
-  
+
   if (time_spent_settled>settle_time){
     cout << "good" << endl;
     return(true);

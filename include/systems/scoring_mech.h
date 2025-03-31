@@ -15,15 +15,14 @@ class Scoring_Mech{
     void initialize();
 
     void neutral_stake_control();
-    int LOADING_ANGLE = 32800;
-    int LOADING_UP_ANGLE_TRESHOLD = 950;
-    int LOADING_UP_VELOCITY = 100;
-    int LOADING_UP_FULL_VELOCITY = 400;
-    int ABOVE_POSITIVE_ANGLE = 1000;
+    int LOADING_ANGLE = 9150;
+    int LOADING_ANGLE_TRESHOLD = 500;
+
+    int LOADING_UP_VELOCITY = 200;
+    int ABOVE_POSITIVE_ANGLE = 12000;
     
     int LOADING_DOWN_VELOCITY;
-    int LOADING_DOWN_ANGLE_TRESHOLD = 2000; 
-    int DESCORE_ANGLE = 22000;
+    int DESCORE_ANGLE = 32000;
 
     static int neutral_stake_task();
     void move1();

@@ -29,22 +29,23 @@ void Scoring_Mech::initialize() {
 }
 
 void Scoring_Mech::neutral_stake_control() {
+    //cout << neutral_stake_rot.get_angle() << endl;
     if (master.get_digital(DIGITAL_A)) {
         neutral_stake_position = 1;
         int timeout = 0;
-        if (neutral_stake_rot.get_angle() > LOADING_ANGLE + LOADING_UP_ANGLE_TRESHOLD || neutral_stake_rot.get_angle() < ABOVE_POSITIVE_ANGLE) {
-            while ((neutral_stake_rot.get_angle() > LOADING_ANGLE + LOADING_UP_ANGLE_TRESHOLD || neutral_stake_rot.get_angle() < ABOVE_POSITIVE_ANGLE) && (timeout < 3000)) {
-                neutral_stake_mtr.move_velocity(-LOADING_UP_VELOCITY);
+        if (neutral_stake_rot.get_angle() > LOADING_ANGLE + LOADING_ANGLE_TRESHOLD && neutral_stake_rot.get_angle() < ABOVE_POSITIVE_ANGLE) {
+            while (neutral_stake_rot.get_angle() > LOADING_ANGLE + LOADING_ANGLE_TRESHOLD && neutral_stake_rot.get_angle() < ABOVE_POSITIVE_ANGLE && timeout < 3000) {
+                neutral_stake_mtr.move_velocity(LOADING_UP_VELOCITY);
                 pros::delay(10);
                 timeout += 10;
             }
         } 
         
-        else if (neutral_stake_rot.get_angle() < LOADING_ANGLE - LOADING_DOWN_ANGLE_TRESHOLD) {
-            while (neutral_stake_rot.get_angle() < LOADING_ANGLE - LOADING_DOWN_ANGLE_TRESHOLD && (timeout < 3000)) {
-                LOADING_DOWN_VELOCITY = (LOADING_ANGLE - neutral_stake_rot.get_angle())/1000 * 45;
+        else if (neutral_stake_rot.get_angle() < LOADING_ANGLE - LOADING_ANGLE_TRESHOLD || neutral_stake_rot.get_angle() > ABOVE_POSITIVE_ANGLE)  {
+            while ((neutral_stake_rot.get_angle() < LOADING_ANGLE - LOADING_ANGLE_TRESHOLD || neutral_stake_rot.get_angle() > ABOVE_POSITIVE_ANGLE) && (timeout < 3000)) {
+                //LOADING_DOWN_VELOCITY = (LOADING_ANGLE - neutral_stake_rot.get_angle())/3000 * 100;
                 //cout << LOADING_DOWN_VELOCITY <<  " "  << neutral_stake_rot.get_angle() << " " << neutral_stake_position << endl;
-                neutral_stake_mtr.move_velocity(LOADING_DOWN_VELOCITY);
+                neutral_stake_mtr.move_velocity(-100);
                 pros::delay(10);
                 timeout += 10;
             }
@@ -60,10 +61,10 @@ void Scoring_Mech::neutral_stake_control() {
             neutral_stake_position = 0;
             current_outtaking = 0;
         }
-        neutral_stake_mtr.move_velocity(-400);
+        neutral_stake_mtr.move_velocity(400);
     }
     else if (master.get_digital(DIGITAL_Y)) {
-        neutral_stake_mtr.move_velocity(400);
+        neutral_stake_mtr.move_velocity(-400);
     } 
     else if (master.get_digital(DIGITAL_R2)) {
         if (neutral_stake_position == 1) {
@@ -76,7 +77,7 @@ void Scoring_Mech::neutral_stake_control() {
             current_outtaking = 0;
         }
         while (neutral_stake_rot.get_angle() > DESCORE_ANGLE || neutral_stake_rot.get_angle() < ABOVE_POSITIVE_ANGLE) {
-            neutral_stake_mtr.move_velocity(-LOADING_UP_FULL_VELOCITY);
+            neutral_stake_mtr.move_velocity(400);
             pros::delay(10);
         }
     } 
@@ -94,7 +95,7 @@ int Scoring_Mech::neutral_stake_task() {
 }
 
 
-void Scoring_Mech::move1() {
+/*void Scoring_Mech::move1() {
     double LOADING_ANGLE = 32800;
     double LOADING_UP_ANGLE_TRESHOLD = 950;
     int LOADING_UP_VELOCITY = 100;
@@ -118,13 +119,13 @@ void Scoring_Mech::move1() {
             }
         }
         neutral_stake_mtr.move_velocity(0);
-}
+}*/
 
 void Scoring_Mech::move2(double voltage) {
     neutral_stake_mtr.move_velocity(-voltage);
 }
 
-void Scoring_Mech::move3(int max_timeout, int velocity) {
+/*void Scoring_Mech::move3(int max_timeout, int velocity) {
     double LOADING_ANGLE = 33400;
     double LOADING_UP_ANGLE_TRESHOLD = 950;
     int LOADING_UP_VELOCITY = 200;
@@ -148,7 +149,7 @@ void Scoring_Mech::move3(int max_timeout, int velocity) {
             }
         } 
     neutral_stake_mtr.move_velocity(0);
-}
+}*/
 
 void Scoring_Mech::set_brake_mode(char brake_type) {
    if (brake_type == 'H'){
