@@ -38,16 +38,16 @@ Drive chassis(
   //If this is an encoder, enter the port as an integer. Triport A will be a "1", Triport B will be a "2", etc.
   14,
   //Input the Forward Tracker diameter (reverse it to make the direction switch):
-  -2,
+  -1.99,
   //Input Forward Tracker center distance (In.) (a positive distance corresponds to a tracker on the right side of the robot, negative is left.)
   //For a zero tracker tank drive with odom, put the positive distance from the center of the robot to the right side of the drive.
-  0.9,
+  0.8125,
   //Input the Sideways Tracker Port, following the same steps as the Forward Tracker Port:
   15,
   //Sideways tracker diameter (reverse to make the direction switch):
-  2,
+  1.99,
   //Sideways tracker center distance (positive distance is behind the center of the robot, negative is in front):
-  4
+  3.375
 );
 
 Scoring_Mech scoring_mech(
