@@ -2,14 +2,14 @@
 
 void default_constants(){
   // Each constant set is in the form of (maxVoltage, kP, kI, kD, startI).
-  chassis.set_drive_constants(14, 0.725, 0, 0.45, 0);
-  chassis.set_heading_constants(0, .15, 0, 7.5, 0); //was 6 0.4 0 1 0
-  chassis.set_turn_constants(14, .215, 0, 0.9, 15);
+  chassis.set_drive_constants(14, 0.65, 0, 0.5, 0);
+  chassis.set_heading_constants(2, .05, 0, 10, 0); //was 6 0.4 0 1 0
+  chassis.set_turn_constants(14, .25, 0, 1, 0);
   chassis.set_swing_constants(14, 0.10, .005, 2.8, 15);
 
   // Each exit condition set is in the form (settle_error, settle_time, timeout).
-  chassis.set_drive_exit_conditions(2.5, 50, 2000);
-  chassis.set_turn_exit_conditions(2.5, 50, 2000);
+  chassis.set_drive_exit_conditions(1.5, 100, 2000);
+  chassis.set_turn_exit_conditions(2.5, 100, 2000);
   chassis.set_swing_exit_conditions(2, 50, 2000);
 }
 
@@ -111,9 +111,9 @@ void test() {
   default_constants();
   chassis.set_coordinates(0, 0, 0);
   pros::delay(1000);
-  chassis.drive_to_point(0, 96, 6, 3, 2.5, 50, 3500);
+  chassis.drive_to_point(0, 96, 6, 2, 1.5, 100, 3500);
   chassis.turn_to_point(-48, 96, 0, 6);
-  chassis.drive_to_point(-48, 96, 6, 3);
+  chassis.drive_to_point(-48, 96, 6, 2);
   /*chassis.turn_to_point(-96, 0, 0, 6);
   chassis.drive_to_point(-96, 0, 6, 0, 2.5, 50, 3500);
   chassis.turn_to_point(0, 0, 0, 6);
