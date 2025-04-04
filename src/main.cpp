@@ -4,8 +4,8 @@
 //Motor Definitions
 pros::adi::DigitalOut clench('A');
 //pros::adi::DigitalOut climb('F');
-pros::adi::DigitalOut doinker_left('G');
-pros::adi::DigitalOut doinker_right('H');
+pros::adi::DigitalOut doinker_left('H');
+pros::adi::DigitalOut doinker_right('G');
 pros::Motor left_front_mtr(-1, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor left_middle_mtr(-2, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor left_back_mtr(-3, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
@@ -92,7 +92,8 @@ void opcontrol(void) {
   pros::Task neutral_stake_task(Scoring_Mech::neutral_stake_task);
   pros::Task intake_task(Scoring_Mech::intake_task);
   pros::Task pneumatics_clench_task(Pneumatics::clench_task);
-  pros::Task pneumatics_doinker_task(Pneumatics::doinker_task);
+  pros::Task pneumatics_doinker_task_1(Pneumatics::doinker_left_task);
+  pros::Task pneumatics_doinker_task_2(Pneumatics::doinker_right_task);
   while (true) {
     chassis.arcade_control();
     pros::delay(util::DELAY_TIME); 

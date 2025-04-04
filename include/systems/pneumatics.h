@@ -13,10 +13,13 @@ class Pneumatics{
    void clench_v(int value);
 
    void doinker_initialize();
-   void doinker_control();
-   void doinker_v(int value);
+   void doinker_left_control();
+   void doinker_right_control();
+   void doinker_left_v(int value);
+   void doinker_right_v(int value);
 
    static int clench_task();
-   static int doinker_task();
+   static int doinker_left_task();
+   static int doinker_right_task();
    
 };

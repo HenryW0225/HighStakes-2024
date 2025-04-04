@@ -34,29 +34,51 @@ int Pneumatics::clench_task() {
    } return 1;
 }
 
-void Pneumatics::doinker_control() {
-  if (master.get_digital(DIGITAL_X)){
-       doinker_open = !doinker_open;
-       doinker_right.set_value(doinker_open);
-       while (master.get_digital(DIGITAL_X)) {
-           pros::delay(util::DELAY_TIME);
+void Pneumatics::doinker_left_control() {
+   if (master.get_digital(DIGITAL_DOWN)){
+       doinker_left_open = !doinker_left_open;
+       doinker_left.set_value(doinker_left_open);
+       while (master.get_digital(DIGITAL_DOWN)) {
+         pros::delay(util::DELAY_TIME);
        }
    }
 }
 
+void Pneumatics::doinker_right_control() {
+   if (master.get_digital(DIGITAL_X)){
+      doinker_right_open = !doinker_right_open;
+      doinker_right.set_value(doinker_right_open);
+      while (master.get_digital(DIGITAL_X)) {
+        pros::delay(util::DELAY_TIME);
+      }
+  }
+}
+
 
 void Pneumatics::doinker_initialize() {
+   doinker_left.set_value(0);
    doinker_right.set_value(0);
 }
 
 
-void Pneumatics::doinker_v(int value) {
+void Pneumatics::doinker_left_v(int value) {
+   doinker_left.set_value(value);
+}
+
+void Pneumatics::doinker_right_v(int value) {
    doinker_right.set_value(value);
 }
 
-int Pneumatics::doinker_task() {
+int Pneumatics::doinker_left_task() {
    while (true) {
-      pneumatics.doinker_control();
+      pneumatics.doinker_left_control();
+      pros::delay(10);
+   } return 1;
+}
+
+int Pneumatics::doinker_right_task() {
+   while (true) {
+      pneumatics.doinker_right_control();
       pros::delay(10);
    } return 1;
 }

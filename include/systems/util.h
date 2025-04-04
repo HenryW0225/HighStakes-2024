@@ -5,7 +5,8 @@ extern pros::Controller master;
 
 extern int clench_down;
 extern int climb_open;
-extern int doinker_open;
+extern int doinker_left_open;
+extern int doinker_right_open;
 
 float reduce_0_to_360(float angle);
 
