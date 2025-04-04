@@ -4,7 +4,8 @@
 //Motor Definitions
 pros::adi::DigitalOut clench('A');
 //pros::adi::DigitalOut climb('F');
-pros::adi::DigitalOut doinker('G');
+pros::adi::DigitalOut doinker_left('G');
+pros::adi::DigitalOut doinker_right('H');
 pros::Motor left_front_mtr(-1, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor left_middle_mtr(-2, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor left_back_mtr(-3, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
@@ -60,7 +61,7 @@ Scoring_Mech scoring_mech(
 
 
 Pneumatics pneumatics(
-	{clench, doinker}
+	{clench, doinker_left, doinker_right}
 );
 
 

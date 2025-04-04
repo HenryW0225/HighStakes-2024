@@ -4,8 +4,9 @@ class Pneumatics{
    public:
    pros::adi::DigitalOut clench;
    //pros::adi::DigitalOut climb;
-   pros::adi::DigitalOut doinker;
-   Pneumatics(pros::adi::DigitalOut clench_port, pros::adi::DigitalOut doinker_port);
+   pros::adi::DigitalOut doinker_left;
+   pros::adi::DigitalOut doinker_right;
+   Pneumatics(pros::adi::DigitalOut clench_port, pros::adi::DigitalOut doinker_left_port, pros::adi::DigitalOut doinker_right_port);
 
    void clench_initialize();
    void clench_control();

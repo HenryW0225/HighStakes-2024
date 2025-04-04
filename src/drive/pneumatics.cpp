@@ -1,9 +1,10 @@
 #include "main.h"
 
 
-Pneumatics::Pneumatics(pros::adi::DigitalOut clench_port, pros::adi::DigitalOut doinker_port)
+Pneumatics::Pneumatics(pros::adi::DigitalOut clench_port, pros::adi::DigitalOut doinker_left_port, pros::adi::DigitalOut doinker_right_port)
    : clench(clench_port),
-   doinker(doinker_port) {}
+   doinker_left(doinker_left_port),
+   doinker_right(doinker_right_port) {}
 
 
 void Pneumatics::clench_control() {
@@ -36,7 +37,7 @@ int Pneumatics::clench_task() {
 void Pneumatics::doinker_control() {
   if (master.get_digital(DIGITAL_X)){
        doinker_open = !doinker_open;
-       doinker.set_value(doinker_open);
+       doinker_right.set_value(doinker_open);
        while (master.get_digital(DIGITAL_X)) {
            pros::delay(util::DELAY_TIME);
        }
@@ -45,12 +46,12 @@ void Pneumatics::doinker_control() {
 
 
 void Pneumatics::doinker_initialize() {
-   doinker.set_value(0);
+   doinker_right.set_value(0);
 }
 
 
 void Pneumatics::doinker_v(int value) {
-   doinker.set_value(value);
+   doinker_right.set_value(value);
 }
 
 int Pneumatics::doinker_task() {
