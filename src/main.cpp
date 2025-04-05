@@ -4,8 +4,7 @@
 //Motor Definitions
 pros::adi::DigitalOut clench('A');
 //pros::adi::DigitalOut climb('F');
-pros::adi::DigitalOut doinker_left('H');
-pros::adi::DigitalOut doinker_right('G');
+pros::adi::DigitalOut doinker('G');
 pros::Motor left_front_mtr(-1, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor left_middle_mtr(-2, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor left_back_mtr(-3, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
@@ -39,16 +38,16 @@ Drive chassis(
   //If this is an encoder, enter the port as an integer. Triport A will be a "1", Triport B will be a "2", etc.
   14,
   //Input the Forward Tracker diameter (reverse it to make the direction switch):
-  -1.99,
+  -1.995,
   //Input Forward Tracker center distance (In.) (a positive distance corresponds to a tracker on the right side of the robot, negative is left.)
   //For a zero tracker tank drive with odom, put the positive distance from the center of the robot to the right side of the drive.
   0.8125,
   //Input the Sideways Tracker Port, following the same steps as the Forward Tracker Port:
-  15,
+  15, 
   //Sideways tracker diameter (reverse to make the direction switch):
   1.99,
   //Sideways tracker center distance (positive distance is behind the center of the robot, negative is in front):
-  3.375
+  4
 );
 
 Scoring_Mech scoring_mech(
@@ -61,7 +60,7 @@ Scoring_Mech scoring_mech(
 
 
 Pneumatics pneumatics(
-	{clench, doinker_left, doinker_right}
+	{clench, doinker}
 );
 
 
@@ -92,8 +91,7 @@ void opcontrol(void) {
   pros::Task neutral_stake_task(Scoring_Mech::neutral_stake_task);
   pros::Task intake_task(Scoring_Mech::intake_task);
   pros::Task pneumatics_clench_task(Pneumatics::clench_task);
-  pros::Task pneumatics_doinker_task_1(Pneumatics::doinker_left_task);
-  pros::Task pneumatics_doinker_task_2(Pneumatics::doinker_right_task);
+  pros::Task pneumatics_doinker_task(Pneumatics::doinker_task);
   while (true) {
     chassis.arcade_control();
     pros::delay(util::DELAY_TIME); 
