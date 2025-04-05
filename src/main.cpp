@@ -39,12 +39,12 @@ Drive chassis(
   //If this is an encoder, enter the port as an integer. Triport A will be a "1", Triport B will be a "2", etc.
   14,
   //Input the Forward Tracker diameter (reverse it to make the direction switch):
-  -1.99,
+  -1.995,
   //Input Forward Tracker center distance (In.) (a positive distance corresponds to a tracker on the right side of the robot, negative is left.)
   //For a zero tracker tank drive with odom, put the positive distance from the center of the robot to the right side of the drive.
   0.5288,
   //Input the Sideways Tracker Port, following the same steps as the Forward Tracker Port:
-  15,
+  15, 
   //Sideways tracker diameter (reverse to make the direction switch):
   1.99,
   //Sideways tracker center distance (positive distance is behind the center of the robot, negative is in front):
@@ -61,7 +61,7 @@ Scoring_Mech scoring_mech(
 
 
 Pneumatics pneumatics(
-	{clench, doinker_left, doinker_right}
+	{clench, doinker_left,doinker_right}
 );
 
 
@@ -92,8 +92,8 @@ void opcontrol(void) {
   pros::Task neutral_stake_task(Scoring_Mech::neutral_stake_task);
   pros::Task intake_task(Scoring_Mech::intake_task);
   pros::Task pneumatics_clench_task(Pneumatics::clench_task);
-  pros::Task pneumatics_doinker_task_1(Pneumatics::doinker_left_task);
-  pros::Task pneumatics_doinker_task_2(Pneumatics::doinker_right_task);
+  pros::Task pneumatics_doinker_task(Pneumatics::doinker_right_task);
+  pros::Task pneumatics_doinker_task(Pneumatics::doinker_left_task);
   while (true) {
     chassis.arcade_control();
     pros::delay(util::DELAY_TIME); 
