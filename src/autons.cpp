@@ -9,7 +9,7 @@ void default_constants(){
 
   // Each exit condition set is in the form (settle_error, settle_time, timeout).
   chassis.set_drive_exit_conditions(1.5, 100, 2000);
-  chassis.set_turn_exit_conditions(2.5, 100, 2000);
+  chassis.set_turn_exit_conditions(2.5, 50, 2000);
   chassis.set_swing_exit_conditions(2, 50, 2000);
 }
 
@@ -111,9 +111,10 @@ void test() {
   default_constants();
   chassis.set_coordinates(0, 0, 0);
   pros::delay(1000);
-  chassis.drive_to_point(0, 96, 6, 2, 1.5, 100, 3500);
+  //chassis.drive_with_voltage(-1.5, 1.5);
+  /*chassis.drive_to_point(0, 96, 6, 2, 1.5, 100, 3500);
   chassis.turn_to_point(-48, 96, 0, 6);
-  chassis.drive_to_point(-48, 96, 6, 2);
+  chassis.drive_to_point(-48, 96, 6, 2);*/
   /*chassis.turn_to_point(-96, 0, 0, 6);
   chassis.drive_to_point(-96, 0, 6, 0, 2.5, 50, 3500);
   chassis.turn_to_point(0, 0, 0, 6);
@@ -139,9 +140,7 @@ void test() {
   chassis.drive_to_point(0, 0, 8, 0, 2, 50, 3500);
   chassis.turn_to_point(0, 96, 0, 8, 2, 50, 3500);*/
 
-
-
-  /*chassis.turn_to_point(24, 0, 0, 8);
+  chassis.turn_to_point(24, 0, 0, 8);
   pros::delay(500);
   chassis.turn_to_point(0, -24, 0, 8);
   pros::delay(500);
@@ -150,6 +149,14 @@ void test() {
   chassis.turn_to_point(0, 24, 0, 8);
   pros::delay(500);
   chassis.turn_to_point(24, 0, 0, 8);
+  pros::delay(500);
+  chassis.turn_to_point(0, -24, 0, 8);
+  pros::delay(500);
+  chassis.turn_to_point(-24, 0, 0, 8);
+  pros::delay(500);
+  chassis.turn_to_point(0, 24, 0, 8);
+  pros::delay(500);
+  /*chassis.turn_to_point(24, 0, 0, 8);
   pros::delay(500);
   chassis.turn_to_point(0, -24, 0, 8);
   pros::delay(500);

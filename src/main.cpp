@@ -2,10 +2,10 @@
 #include <iostream> 
 
 //Motor Definitions
-pros::adi::DigitalOut clench('A');
+pros::adi::DigitalOut clench('B');
 //pros::adi::DigitalOut climb('F');
-pros::adi::DigitalOut doinker_left('H');
-pros::adi::DigitalOut doinker_right('G');
+pros::adi::DigitalOut doinker_left('C');
+pros::adi::DigitalOut doinker_right('A');
 pros::Motor left_front_mtr(-1, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor left_middle_mtr(-2, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 pros::Motor left_back_mtr(-3, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
@@ -42,13 +42,13 @@ Drive chassis(
   -1.99,
   //Input Forward Tracker center distance (In.) (a positive distance corresponds to a tracker on the right side of the robot, negative is left.)
   //For a zero tracker tank drive with odom, put the positive distance from the center of the robot to the right side of the drive.
-  0.8125,
+  0.5288,
   //Input the Sideways Tracker Port, following the same steps as the Forward Tracker Port:
   15,
   //Sideways tracker diameter (reverse to make the direction switch):
   1.99,
   //Sideways tracker center distance (positive distance is behind the center of the robot, negative is in front):
-  3.375
+  4.579
 );
 
 Scoring_Mech scoring_mech(

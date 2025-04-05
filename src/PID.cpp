@@ -23,18 +23,18 @@ PID::PID(float error, float kp, float ki, float kd, float starti, float settle_e
 {};
 
 float PID::compute(float error) {
-  output = kp*error + ki*accumulated_error + kd*(error-previous_error);
+  output = kp * error + ki * accumulated_error + kd * (error - previous_error);
   
   previous_error = error;
 
   if(fabs(error)<settle_error){
-    time_spent_settled+=10;
+    time_spent_settled += 10;
   } else {
     time_spent_settled = 0;
   }
 
-  time_spent_running+=10;
-  
+  time_spent_running += 10;
+
   return output;
 }
 
