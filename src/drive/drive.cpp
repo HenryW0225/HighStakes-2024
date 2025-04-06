@@ -456,7 +456,7 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
 
     float heading_output = headingPID.compute(heading_error);
     
-    if (drive_error < 4.25) { 
+    if (drive_error < 5) { 
       heading_output = 0; 
     }
 

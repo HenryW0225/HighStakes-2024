@@ -35,10 +35,10 @@ int Pneumatics::clench_task() {
 }
 
 void Pneumatics::doinker_left_control() {
-   if (master.get_digital(DIGITAL_DOWN)){
+   if (master.get_digital(DIGITAL_R2)){
        doinker_left_open = !doinker_left_open;
        doinker_left.set_value(doinker_left_open);
-       while (master.get_digital(DIGITAL_DOWN)) {
+       while (master.get_digital(DIGITAL_R2)) {
          pros::delay(util::DELAY_TIME);
        }
    }

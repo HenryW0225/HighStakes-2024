@@ -70,12 +70,14 @@ void Scoring_Mech::neutral_stake_control() {
             pros::delay(5);
         } 
     }
-    else if (master.get_digital(DIGITAL_UP)) {
-        neutral_stake_mtr.move_velocity(600);
+    /*else if (master.get_digital(DIGITAL_UP)) {
+        if (neutral_stake_rot.get_angle() < 15000 or neutral_stake_rot.get_angle() > 24000) {
+            neutral_stake_mtr.move_velocity(600);
+        }
 
     } else if (master.get_digital(DIGITAL_DOWN)) {
         neutral_stake_mtr.move_velocity(-600);
-    }
+    }*/
     else {
         neutral_stake_mtr.move_velocity(0);
     }
@@ -91,7 +93,7 @@ int Scoring_Mech::neutral_stake_task() {
 
 
 void Scoring_Mech::move1(double voltage) {
-    neutral_stake_mtr.move_velocity(-voltage);
+    neutral_stake_mtr.move_velocity(voltage);
 }
 
 
