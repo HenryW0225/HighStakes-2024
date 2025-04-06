@@ -231,14 +231,12 @@ void Drive::turn_to_angle(float angle, float turn_max_voltage){
 }
 
 void Drive::turn_to_angle(float angle, float turn_max_voltage, float turn_settle_error, float turn_settle_time, float turn_timeout, float turn_kp, float turn_ki, float turn_kd, float turn_starti){
+  cout << chassis.get_absolute_heading() << " " << R_ForwardTracker.get_position() << " " << R_SidewaysTracker.get_position() << endl;
+  pros::delay(500);
   desired_heading = angle;
-  // Desired heading carries over the angle from one movement to another. That way, if the robot doesn't
-  // finish a turn movement, it will still drive at the angle that was specified in the turn movement.
   PID turnPID(reduce_negative_180_to_180(angle - get_absolute_heading()), turn_kp, turn_ki, turn_kd, turn_starti, turn_settle_error, turn_settle_time, turn_timeout);
   while(turnPID.is_settled() == false){
     float error = reduce_negative_180_to_180(angle - get_absolute_heading());
-    // Reducing the angle to a value between -180 and 180 degrees ensures that the robot always takes the 
-    // shorter path when making a turn.
     float output = turnPID.compute(error);
     output = clamp(output, -turn_max_voltage, turn_max_voltage);
     drive_with_voltage(output, -output);
@@ -246,6 +244,8 @@ void Drive::turn_to_angle(float angle, float turn_max_voltage, float turn_settle
   }
   DriveL.brake();
   DriveR.brake();
+  pros::delay(500);
+  cout << chassis.get_absolute_heading() << " " << R_ForwardTracker.get_position() << " " << R_SidewaysTracker.get_position() << endl;
 }
 
 void Drive::drive_distance(float distance){
@@ -440,7 +440,6 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
 }
 
 void Drive::drive_to_point(float X_position, float Y_position, float drive_max_voltage, float heading_max_voltage, float drive_settle_error, float drive_settle_time, float drive_timeout, float drive_kp, float drive_ki, float drive_kd, float drive_starti, float heading_kp, float heading_ki, float heading_kd, float heading_starti){
-  //std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
   PID drivePID(hypot(X_position-get_X_position(),Y_position-get_Y_position()), drive_kp, drive_ki, drive_kd, drive_starti, drive_settle_error, drive_settle_time, drive_timeout);
   PID headingPID(reduce_negative_180_to_180(to_deg(atan2(X_position-get_X_position(),Y_position-get_Y_position()))-get_absolute_heading()), heading_kp, heading_ki, heading_kd, heading_starti);
   while(drivePID.is_settled() == false){
@@ -457,7 +456,7 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
 
     float heading_output = headingPID.compute(heading_error);
     
-    if (drive_error < 3) { 
+    if (drive_error < 4.25) { 
       heading_output = 0; 
     }
 
@@ -471,6 +470,7 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
   DriveR.brake();
   DriveL.set_brake_mode(MOTOR_BRAKE_HOLD);
   DriveL.brake();
+  pros::delay(500);
   std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
 }
 
@@ -487,7 +487,6 @@ void Drive::turn_to_point(float X_position, float Y_position, float extra_angle_
 }
 
 void Drive::turn_to_point(float X_position, float Y_position, float extra_angle_deg, float turn_max_voltage, float turn_settle_error, float turn_settle_time, float turn_timeout, float turn_kp, float turn_ki, float turn_kd, float turn_starti){
-  //std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
   PID turnPID(reduce_negative_180_to_180(to_deg(atan2(X_position-get_X_position(),Y_position-get_Y_position())) - get_absolute_heading()), turn_kp, turn_ki, turn_kd, turn_starti, turn_settle_error, turn_settle_time, turn_timeout);
   while(turnPID.is_settled() == false){
     float error = reduce_negative_180_to_180(to_deg(atan2(X_position-get_X_position(),Y_position-get_Y_position())) - get_absolute_heading() + extra_angle_deg);

@@ -11,79 +11,74 @@ Scoring_Mech::Scoring_Mech(std::initializer_list<std::int8_t> neutral_stake_mtr_
 
 void Scoring_Mech::initialize() {
     neutral_stake_rot.reset_position();
-    neutral_stake_position = 0;
-    current_outtaking = 0;
-    current_intaking = 0;
     neutral_stake_mtr.move_velocity(0);
     neutral_stake_rot.set_data_rate(5);
-
-    scoring_mech.driverControl = false;
-    intake_mtr.move_velocity(0);
-    intake_mtr.set_zero_position(0);
     intake_mtr.set_encoder_units_all(pros::v5::MotorUnits::counts);
     intake_mtr.set_brake_mode(MOTOR_BRAKE_COAST);
-    neutral_stake_mtr.set_brake_mode(MOTOR_BRAKE_HOLD);
     color_sensor.set_integration_time(5);
     color_sensor.set_led_pwm(100);
     set_brake_mode('H');
 }
 
 void Scoring_Mech::neutral_stake_control() {
-    //cout << neutral_stake_rot.get_angle() << endl;
-    if (master.get_digital(DIGITAL_A)) {
-        neutral_stake_position = 1;
-        int timeout = 0;
-        if (neutral_stake_rot.get_angle() > LOADING_ANGLE + LOADING_ANGLE_TRESHOLD && neutral_stake_rot.get_angle() < ABOVE_POSITIVE_ANGLE) {
-            while (neutral_stake_rot.get_angle() > LOADING_ANGLE + LOADING_ANGLE_TRESHOLD && neutral_stake_rot.get_angle() < ABOVE_POSITIVE_ANGLE && timeout < 3000) {
-                neutral_stake_mtr.move_velocity(LOADING_UP_VELOCITY);
-                pros::delay(10);
-                timeout += 10;
-            }
-        } 
-        
-        else if (neutral_stake_rot.get_angle() < LOADING_ANGLE - LOADING_ANGLE_TRESHOLD || neutral_stake_rot.get_angle() > ABOVE_POSITIVE_ANGLE)  {
-            while ((neutral_stake_rot.get_angle() < LOADING_ANGLE - LOADING_ANGLE_TRESHOLD || neutral_stake_rot.get_angle() > ABOVE_POSITIVE_ANGLE) && (timeout < 3000)) {
-                //LOADING_DOWN_VELOCITY = (LOADING_ANGLE - neutral_stake_rot.get_angle())/3000 * 100;
-                //cout << LOADING_DOWN_VELOCITY <<  " "  << neutral_stake_rot.get_angle() << " " << neutral_stake_position << endl;
-                neutral_stake_mtr.move_velocity(-100);
-                pros::delay(10);
-                timeout += 10;
-            }
-        }
-    }
-    else if (master.get_digital(DIGITAL_B)) {
-        if (neutral_stake_position == 1){
-            current_outtaking = 1;
-            intake_mtr.move_velocity(-200);
-            pros::delay(150);
-            intake_mtr.move_velocity(0);
-            pros::delay(100);
-            neutral_stake_position = 0;
-            current_outtaking = 0;
-        }
-        neutral_stake_mtr.move_velocity(400);
-    }
-    else if (master.get_digital(DIGITAL_Y)) {
-        neutral_stake_mtr.move_velocity(-400);
-    } 
-    else if (master.get_digital(DIGITAL_R2)) {
+    if (master.get_digital(DIGITAL_A) && neutral_stake_position != 3) {
         if (neutral_stake_position == 1) {
             current_outtaking = 1;
             intake_mtr.move_velocity(-200);
-            pros::delay(150);
+            pros::delay(200);
             intake_mtr.move_velocity(0);
-            pros::delay(100);
-            neutral_stake_position = 0;
             current_outtaking = 0;
+            neutral_stake_mtr.move_velocity(600);
+            timeout = 0;
+            while (neutral_stake_rot.get_angle() < 35000 and timeout < 3000) {
+                pros::delay(5);
+                timeout += 5;
+            }
         }
-        while (neutral_stake_rot.get_angle() > DESCORE_ANGLE || neutral_stake_rot.get_angle() < ABOVE_POSITIVE_ANGLE) {
-            neutral_stake_mtr.move_velocity(400);
-            pros::delay(10);
+        neutral_stake_mtr.move_velocity(600);
+        timeout = 0;
+        while (neutral_stake_rot.get_angle() > angle_positions[neutral_stake_position + 1] + up_thresholds[neutral_stake_position] and timeout < 3000) {
+            pros::delay(5);
+            timeout += 5;
         }
+        neutral_stake_position++;
     } 
+    else if (master.get_digital(DIGITAL_Y) && neutral_stake_position != 0) {
+        neutral_stake_mtr.move_velocity(-600);
+        if (neutral_stake_position == 2) {
+            timeout = 0;
+            while (neutral_stake_rot.get_angle() > 1000 and timeout < 3000) {
+                pros::delay(5);
+                timeout += 5;
+            }
+        }
+        timeout = 0;
+        while (neutral_stake_rot.get_angle() < angle_positions[neutral_stake_position - 1] - down_thresholds[neutral_stake_position-1] and timeout < 3000) {
+            pros::delay(5);
+            timeout += 5;
+        }
+        neutral_stake_position--;
+    } 
+    else if (master.get_digital(DIGITAL_B) && neutral_stake_position == 1) {
+        current_outtaking = 1;
+        intake_mtr.move_velocity(-200);
+        pros::delay(200);
+        intake_mtr.move_velocity(0);
+        current_outtaking = 0;
+        neutral_stake_mtr.move_velocity(600);
+        while (neutral_stake_rot.get_angle() > 4000) {
+            pros::delay(5);
+        } 
+    }
+    else if (master.get_digital(DIGITAL_UP)) {
+        neutral_stake_mtr.move_velocity(600);
+
+    } else if (master.get_digital(DIGITAL_DOWN)) {
+        neutral_stake_mtr.move_velocity(-600);
+    }
     else {
         neutral_stake_mtr.move_velocity(0);
-    } 
+    }
 }
 
 int Scoring_Mech::neutral_stake_task() {
@@ -95,61 +90,10 @@ int Scoring_Mech::neutral_stake_task() {
 }
 
 
-/*void Scoring_Mech::move1() {
-    double LOADING_ANGLE = 32800;
-    double LOADING_UP_ANGLE_TRESHOLD = 950;
-    int LOADING_UP_VELOCITY = 100;
-    int LOADING_UP_FULL_VELOCITY = 400;
-    
-    int LOADING_DOWN_ACCURATE_VELOCITY = 100;
-    int LOADING_DOWN_FULL_VELOCITY = 600;
-    double LOADING_DOWN_ANGLE_TRESHOLD = 2000; 
-    double SAFE_ANGLE_DOWN = 27000;
-    double DESCORE_ANGLE = 23000;
-    int timeout = 0;
-        if (neutral_stake_rot.get_angle() > LOADING_ANGLE + LOADING_UP_ANGLE_TRESHOLD 
-                || neutral_stake_rot.get_angle() < 5000) {
-            timeout = 0;
-            while ((neutral_stake_rot.get_angle() > LOADING_ANGLE + LOADING_UP_ANGLE_TRESHOLD 
-                    || neutral_stake_rot.get_angle() < LOADING_UP_ANGLE_TRESHOLD)
-                    && (timeout < 3000)) {
-                neutral_stake_mtr.move_velocity(-LOADING_UP_VELOCITY);
-                pros::delay(10);
-                timeout += 10;
-            }
-        }
-        neutral_stake_mtr.move_velocity(0);
-}*/
-
-void Scoring_Mech::move2(double voltage) {
+void Scoring_Mech::move1(double voltage) {
     neutral_stake_mtr.move_velocity(-voltage);
 }
 
-/*void Scoring_Mech::move3(int max_timeout, int velocity) {
-    double LOADING_ANGLE = 33400;
-    double LOADING_UP_ANGLE_TRESHOLD = 950;
-    int LOADING_UP_VELOCITY = 200;
-    int LOADING_UP_FULL_VELOCITY = 500;
-    
-    int LOADING_DOWN_ACCURATE_VELOCITY = 100;
-    int LOADING_DOWN_FULL_VELOCITY = 600;
-    double LOADING_DOWN_ANGLE_TRESHOLD = 2000; 
-    double SAFE_ANGLE_DOWN = 27000;
-    double DESCORE_ANGLE = 23000;
-    int timeout = 0;
-    if (neutral_stake_rot.get_angle() > 18000 + LOADING_UP_ANGLE_TRESHOLD ||
-                 neutral_stake_rot.get_angle() < LOADING_UP_ANGLE_TRESHOLD) {
-            timeout = 0;
-            while ((neutral_stake_rot.get_angle() > 18000 + LOADING_UP_ANGLE_TRESHOLD  ||
-                     neutral_stake_rot.get_angle() < LOADING_UP_ANGLE_TRESHOLD)
-                    && (timeout < max_timeout)) {
-                neutral_stake_mtr.move_velocity(-1 * velocity);
-                pros::delay(10);
-                timeout += 10;
-            }
-        } 
-    neutral_stake_mtr.move_velocity(0);
-}*/
 
 void Scoring_Mech::set_brake_mode(char brake_type) {
    if (brake_type == 'H'){
@@ -303,13 +247,3 @@ int Scoring_Mech::rush_helper_task() {
     scoring_mech.rush_helper();
     return 1;
 }*/
-
-
-
-
-
-
-
-
-
-

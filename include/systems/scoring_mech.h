@@ -1,40 +1,33 @@
 #include "main.h"
+#include <array>
 
 class Scoring_Mech{
     public:
-    int neutral_stake_position;
-    int current_outtaking;
-    int current_intaking;
+    int neutral_stake_position = 0;
+    int current_outtaking = 0;
     pros::MotorGroup neutral_stake_mtr;
     pros::Rotation neutral_stake_rot;
     pros::MotorGroup intake_mtr;
     pros::Optical color_sensor;
-    //pros::Optical color_sensor(const std::uint8_t port, double time);
     Scoring_Mech(std::initializer_list<std::int8_t> neutral_stake_mtr_grp, int8_t neutral_stake_rot_grp, std::initializer_list<std::int8_t> intake_mtr_grp, int8_t intake_color_sensor_grp);
-    
+
     void initialize();
 
     void neutral_stake_control();
-    int LOADING_ANGLE = 9150;
-    int LOADING_ANGLE_TRESHOLD = 500;
-
-    int LOADING_UP_VELOCITY = 200;
-    int ABOVE_POSITIVE_ANGLE = 12000;
-    
-    int LOADING_DOWN_VELOCITY;
-    int DESCORE_ANGLE = 32000;
-
     static int neutral_stake_task();
-    void move1();
-    void move2(double velocity);
-    void move3(int timeout, int velocity);
+    int angle_positions[4] = {11700, 8800, 31500, 23500};
+    int up_thresholds[3] = {800, 750, 750};
+    int down_thresholds[3] = {750, 750, 1500};
+    int timeout = 0;
+
+    void move1(double voltage);
     void set_brake_mode(char brake_type);
     void set_up();
 
     void intake_control();
     static int intake_task();
     void intake_move(double velocity);
-    bool driverControl;
+    bool driverControl = false;
 
     static int rush_helper_task();
     void rush_helper();
