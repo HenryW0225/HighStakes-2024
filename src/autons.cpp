@@ -111,7 +111,11 @@ void test() {
   default_constants();
   chassis.set_coordinates(0, 0, 0);
   pros::delay(100);
-  chassis.drive_to_point(0, -36, 6, 2);
+  pneumatics.clench_v(1);
+  pros::delay(500);
+  scoring_mech.intake_move(600);
+
+  /*chassis.drive_to_point(0, -36, 6, 2);
   pros::delay(500);
   pneumatics.clench_v(1);
   pros::delay(1000);
@@ -120,7 +124,7 @@ void test() {
   pros::delay(1500);
   chassis.drive_to_point(24, -36);
   pros::delay(2500);
-  chassis.turn_to_point(-24, 0);
+  chassis.turn_to_point(-24, 0);*/
   //chassis.drive_with_voltage(-1.5, 1.5);
   /*chassis.drive_to_point(0, 96, 6, 2, 1.5, 100, 3500);
   chassis.turn_to_point(-48, 96, 0, 6);

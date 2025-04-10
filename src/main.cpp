@@ -56,12 +56,12 @@ Scoring_Mech scoring_mech(
   16,
   {-9},
   //{-8, 19},
-  13
+  17
 );
 
 
 Pneumatics pneumatics(
-	{clench, doinker_left,doinker_right}
+	{clench, doinker_left, doinker_right}
 );
 
 
@@ -70,10 +70,10 @@ void initialize() {
   scoring_mech.initialize(); 
 	pneumatics.clench_initialize();
   pneumatics.doinker_initialize();
-  pros::Task intake_task_3(Scoring_Mech::intake_detector_task);
+  //pros::Task intake_task_3(Scoring_Mech::intake_detector_task);
   //pros::Task neutral_stake_task(Scoring_Mech::neutral_stake_stopper_task);
-  pros::Task intake_task_1(Scoring_Mech::red_color_sort_task);
-  //pros::Task intake_task_2(Scoring_Mech::blue_color_sort_task);
+  //pros::Task intake_task_1(Scoring_Mech::red_color_sort_task);
+  pros::Task intake_task_2(Scoring_Mech::blue_color_sort_task);
 }
 
 

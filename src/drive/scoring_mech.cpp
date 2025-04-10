@@ -42,6 +42,9 @@ void Scoring_Mech::neutral_stake_control() {
             timeout += 5;
         }
         neutral_stake_position++;
+        neutral_stake_mtr.move_velocity(0);
+        pros::delay(500);
+        cout << neutral_stake_rot.get_angle() << endl;
     } 
     else if (master.get_digital(DIGITAL_Y) && neutral_stake_position != 0) {
         neutral_stake_mtr.move_velocity(-600);
@@ -58,6 +61,10 @@ void Scoring_Mech::neutral_stake_control() {
             timeout += 5;
         }
         neutral_stake_position--;
+        neutral_stake_mtr.move_velocity(0);
+        pros::delay(500);
+        cout << neutral_stake_rot.get_angle() << endl;
+
     } 
     else if (master.get_digital(DIGITAL_B) && neutral_stake_position == 1) {
         current_outtaking = 1;
@@ -66,7 +73,7 @@ void Scoring_Mech::neutral_stake_control() {
         intake_mtr.move_velocity(0);
         current_outtaking = 0;
         neutral_stake_mtr.move_velocity(600);
-        while (neutral_stake_rot.get_angle() > 4000) {
+        while (neutral_stake_rot.get_angle() > 3250) {
             pros::delay(5);
         } 
     }
@@ -149,8 +156,8 @@ void Scoring_Mech::red_color_sort() {
     while (!driverControl) {
         if ((color_sensor.get_hue() <= 230 and color_sensor.get_hue() >= 210) && (color_sensor.get_saturation() <= 0.8 and color_sensor.get_saturation() >= 0.55) && color_sensor.get_proximity() >= 250) {
             current_rotation = intake_mtr.get_position();
-            while (intake_mtr.get_position() - current_rotation < 405) {
-                pros::delay(5);
+            while (intake_mtr.get_position() - current_rotation < 530) {
+                pros::delay(1);
                 continue;
             } 
             current_outtaking = 1;
@@ -174,10 +181,10 @@ void Scoring_Mech::blue_color_sort() {
     color_sensor.set_integration_time(5);
     int current_rotation = 0;
     while (!driverControl) {
-        if ((color_sensor.get_hue() <= 10 or color_sensor.get_hue() >= 350) && (color_sensor.get_saturation() >= 0.6) && color_sensor.get_proximity() >= 250) {
+        if ((color_sensor.get_hue() <= 30 or color_sensor.get_hue() >= 330) && (color_sensor.get_saturation() >= 0.5) && color_sensor.get_proximity() >= 250) {
             current_rotation = intake_mtr.get_position();
-            while (intake_mtr.get_position() - current_rotation < 375) {
-                pros::delay(5);
+            while (intake_mtr.get_position() - current_rotation < 530) {
+                pros::delay(1);
                 continue;
             } 
             current_outtaking = 1;
@@ -218,13 +225,14 @@ int Scoring_Mech::neutral_stake_stopper_task() {
     return 1;
 }*/
 
-void Scoring_Mech::intake_detector() {
+/*void Scoring_Mech::intake_detector() {
+    pros::delay(1500);
     int target_velocity;
     while (!driverControl) {
-        if (intake_mtr.get_target_velocity() >= 100 && intake_mtr.get_actual_velocity() <= 50) {
+        if (intake_mtr.get_target_velocity() >= 300 && intake_mtr.get_actual_velocity() <= 150) {
             target_velocity = intake_mtr.get_target_velocity();
             intake_mtr.move_velocity(-300);
-            pros::delay(100);
+            pros::delay(1000);
             intake_mtr.move_velocity(target_velocity);
             pros::delay(500);
         }
@@ -235,7 +243,7 @@ void Scoring_Mech::intake_detector() {
 int Scoring_Mech::intake_detector_task() {
     scoring_mech.intake_detector();
     return 1;
-}
+}*/
 
 /*void Scoring_Mech::rush_helper() {
     scoring_mech.move2(400);
