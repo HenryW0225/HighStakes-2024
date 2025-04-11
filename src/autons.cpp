@@ -1118,7 +1118,17 @@ void redLeftElim(){
 
 
 void redRightElim(){
-  odom_constants();
+
+  default_constants();
+  chassis.set_coordinates(0,0,0);
+  chassis.turn_timeout = 700;
+  chassis.drive_timeout= 500;
+  chassis.drive_distance(-25,12);
+  chassis.set_coordinates(chassis.get_X_position(),chassis.get_Y_position(), 0);
+  pneumatics.clench_v(1);
+  pros::delay(50);
+  chassis.turn_to_point(16,-51);
+  chassis.drive_to_point(16,-51);
   //chassis.set_coordinates();
   //pros::Task rush_helper(Scoring_Mech::rush_helper_task);
 

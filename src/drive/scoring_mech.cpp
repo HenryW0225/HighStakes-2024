@@ -65,8 +65,9 @@ void Scoring_Mech::neutral_stake_control() {
         pros::delay(200);
         intake_mtr.move_velocity(0);
         current_outtaking = 0;
-        neutral_stake_mtr.move_velocity(600);
-        while (neutral_stake_rot.get_angle() > 4000) {
+        neutral_stake_mtr.move_velocity(600);\
+        // Middle position, like perpendicular to the ground ANGLE
+        while (neutral_stake_rot.get_angle() > 1000) {
             pros::delay(5);
         } 
     }

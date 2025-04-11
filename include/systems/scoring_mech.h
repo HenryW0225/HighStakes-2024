@@ -15,7 +15,8 @@ class Scoring_Mech{
 
     void neutral_stake_control();
     static int neutral_stake_task();
-    int angle_positions[4] = {11700, 8800, 31500, 24000};
+    //#1: Down angle #2: Loading Angle #3: Scoring position #4: idk
+    int angle_positions[4] = {11700, 8800, 31200, 24600};
     int up_thresholds[3] = {800, 750, 750};
     int down_thresholds[3] = {750, 750, 1500};
     int timeout = 0;
