@@ -11,6 +11,7 @@ Scoring_Mech::Scoring_Mech(std::initializer_list<std::int8_t> neutral_stake_mtr_
 
 void Scoring_Mech::initialize() {
     neutral_stake_rot.reset_position();
+    neutral_stake_rot.set_position(35999);
     neutral_stake_mtr.move_velocity(0);
     neutral_stake_rot.set_data_rate(5);
     intake_mtr.set_encoder_units_all(pros::v5::MotorUnits::counts);
@@ -30,16 +31,17 @@ void Scoring_Mech::neutral_stake_control() {
             current_outtaking = 0;
             neutral_stake_mtr.move_velocity(600);
             timeout = 0;
-            while (neutral_stake_rot.get_angle() < 35000 and timeout < 3000) {
+            while (neutral_stake_rot.get_position() > 20000 and timeout < 3000) {
                 pros::delay(5);
                 timeout += 5;
             }
         }
         neutral_stake_mtr.move_velocity(600);
         timeout = 0;
-        while (neutral_stake_rot.get_angle() > angle_positions[neutral_stake_position + 1] + up_thresholds[neutral_stake_position] and timeout < 3000) {
+        while (neutral_stake_rot.get_position() > angle_positions[neutral_stake_position + 1] + up_thresholds[neutral_stake_position] and timeout < 3000) {
             pros::delay(5);
             timeout += 5;
+
         }
         neutral_stake_position++;
     } 
@@ -47,13 +49,13 @@ void Scoring_Mech::neutral_stake_control() {
         neutral_stake_mtr.move_velocity(-600);
         if (neutral_stake_position == 2) {
             timeout = 0;
-            while (neutral_stake_rot.get_angle() > 1000 and timeout < 3000) {
+            while (neutral_stake_rot.get_position() < 24000 and timeout < 3000) {
                 pros::delay(5);
                 timeout += 5;
             }
         }
         timeout = 0;
-        while (neutral_stake_rot.get_angle() < angle_positions[neutral_stake_position - 1] - down_thresholds[neutral_stake_position-1] and timeout < 3000) {
+        while (neutral_stake_rot.get_position() < angle_positions[neutral_stake_position - 1] - (down_thresholds[neutral_stake_position-1]+250) and timeout < 3000) {
             pros::delay(5);
             timeout += 5;
         }
@@ -65,9 +67,9 @@ void Scoring_Mech::neutral_stake_control() {
         pros::delay(200);
         intake_mtr.move_velocity(0);
         current_outtaking = 0;
-        neutral_stake_mtr.move_velocity(600);\
+        neutral_stake_mtr.move_velocity(600);
         // Middle position, like perpendicular to the ground ANGLE
-        while (neutral_stake_rot.get_angle() > 1000) {
+        while (neutral_stake_rot.get_position() > 24000) {
             pros::delay(5);
         } 
     }
@@ -82,6 +84,7 @@ void Scoring_Mech::neutral_stake_control() {
     else {
         neutral_stake_mtr.move_velocity(0);
     }
+    
 }
 
 int Scoring_Mech::neutral_stake_task() {
