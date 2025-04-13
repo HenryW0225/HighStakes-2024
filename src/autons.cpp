@@ -6,16 +6,16 @@ void default_constants(){
   chassis.set_heading_constants(2, .05, 0, 10, 0); //was 6 0.4 0 1 0
   chassis.set_turn_constants(14, .25, 0, 1, 0);
   chassis.set_swing_constants(14, 0.10, .005, 2.8, 15);
-  chassis.drive_kp = 0.62;
+  chassis.drive_kp = 0.6125;
   chassis.drive_ki = 0;
-  chassis.drive_kd = 0.5;
+  chassis.drive_kd = 0.515;
 
-  chassis.turn_kp = 0.25;
+  chassis.turn_kp = 0.218;
   chassis.turn_ki = 0;
-  chassis.turn_kd = 1;
+  chassis.turn_kd = 1.052;
 
   // Each exit condition set is in the form (settle_error, settle_time, timeout).
-  chassis.set_drive_exit_conditions(1.5, 130, 900);
+  chassis.set_drive_exit_conditions(1.5, 200, 2500);
   chassis.set_turn_exit_conditions(2.5, 130, 550);
   chassis.set_swing_exit_conditions(2, 50, 2000);
 }
@@ -25,18 +25,67 @@ void odom_constants(){
 }
 
 void test() {
-  
-  /*
   default_constants();
   chassis.set_coordinates(0, 0, 0);
-  chassis.drive_to_point(0, 24, 14, 0);
-  chassis.turn_to_point(-24,24);
-  chassis.drive_to_point(-24, 24, 14, 0);
-  chassis.turn_to_point(-24,0);
-  chassis.drive_to_point(-24, 0, 14, 0);
-  chassis.turn_to_point(0,0);
-  chassis.drive_to_point(0, 0, 14, 0);
-  chassis.turn_to_point(0,24);
+  pros::delay(2000);
+  chassis.drive_to_point(0, 96,8,2);
+  pros::delay(2500);
+  printf("X: %f Y: %f Heading: %f\n", 0-chassis.get_X_position(), 24-chassis.get_Y_position(), chassis.get_absolute_heading());
+std::string x_str, y_str, heading_str;
+    x_str = std::to_string(chassis.get_X_position());
+    y_str = std::to_string(chassis.get_Y_position());
+    heading_str = std::to_string(chassis.get_absolute_heading());
+    pros::screen::draw_rect(0,0,480,240);
+    pros::screen::set_pen(pros::Color::white);
+    pros::screen::print(TEXT_LARGE, 50, 50, x_str.c_str());
+    pros::screen::print(TEXT_LARGE, 50, 125, y_str.c_str());
+    pros::screen::print(TEXT_LARGE, 50, 175, heading_str.c_str()); 
+  chassis.turn_to_point(-96,96,0,6);
+  chassis.drive_to_point(-96, 96,8,2);
+  pros::delay(2500);
+  printf("X: %f Y: %f Heading: %f\n", -24-chassis.get_X_position(), 24-chassis.get_Y_position(), chassis.get_absolute_heading());
+    x_str = std::to_string(chassis.get_X_position());
+    y_str = std::to_string(chassis.get_Y_position());
+    heading_str = std::to_string(chassis.get_absolute_heading());
+    pros::screen::draw_rect(0,0,480,240);
+    pros::screen::set_pen(pros::Color::white);
+    pros::screen::print(TEXT_LARGE, 50, 50, x_str.c_str());
+    pros::screen::print(TEXT_LARGE, 50, 125, y_str.c_str());
+    pros::screen::print(TEXT_LARGE, 50, 175, heading_str.c_str());
+  chassis.turn_to_point(-96,0,0,6);
+  chassis.drive_to_point(-96, 0, 8,2);
+  pros::delay(2500);
+    x_str = std::to_string(chassis.get_X_position());
+    y_str = std::to_string(chassis.get_Y_position());
+    heading_str = std::to_string(chassis.get_absolute_heading());
+    pros::screen::draw_rect(0,0,480,240);
+    pros::screen::set_pen(pros::Color::white);
+    pros::screen::print(TEXT_LARGE, 50, 50, x_str.c_str());
+    pros::screen::print(TEXT_LARGE, 50, 125, y_str.c_str());
+    pros::screen::print(TEXT_LARGE, 50, 175, heading_str.c_str());
+  printf("X: %f Y: %f Heading: %f\n", -24-chassis.get_X_position(), 0-chassis.get_Y_position(), chassis.get_absolute_heading());
+  chassis.turn_to_point(0,0,0,6);
+  chassis.drive_to_point(0, 0, 8,2);
+  pros::delay(2500);
+    x_str = std::to_string(chassis.get_X_position());
+    y_str = std::to_string(chassis.get_Y_position());
+    heading_str = std::to_string(chassis.get_absolute_heading());
+    pros::screen::draw_rect(0,0,480,240);
+    pros::screen::set_pen(pros::Color::white);
+    pros::screen::print(TEXT_LARGE, 50, 50, x_str.c_str());
+    pros::screen::print(TEXT_LARGE, 50, 125, y_str.c_str());
+    pros::screen::print(TEXT_LARGE, 50, 175, heading_str.c_str());
+  printf("X: %f Y: %f Heading: %f\n", 0-chassis.get_X_position(), 0-chassis.get_Y_position(), chassis.get_absolute_heading());
+  chassis.turn_to_point(0,96,0,6);
+   x_str = std::to_string(chassis.get_X_position());
+    y_str = std::to_string(chassis.get_Y_position());
+    heading_str = std::to_string(chassis.get_absolute_heading());
+    pros::screen::draw_rect(0,0,480,240);
+    pros::screen::set_pen(pros::Color::white);
+    pros::screen::print(TEXT_LARGE, 50, 50, x_str.c_str());
+    pros::screen::print(TEXT_LARGE, 50, 125, y_str.c_str());
+    pros::screen::print(TEXT_LARGE, 50, 175, heading_str.c_str());
+  printf("X: %f Y: %f Heading: %f\n", 0-chassis.get_X_position(), 0-chassis.get_Y_position(), chassis.get_absolute_heading());
   /*
   default_constants();
   chassis.set_coordinates(0, 0, 0);
@@ -1142,13 +1191,36 @@ void redRightElim(){
   default_constants();
   chassis.set_coordinates(0,0,0);
   chassis.turn_timeout = 700;
-  chassis.drive_timeout= 500;
-  chassis.drive_distance(-25,12);
+  chassis.drive_timeout= 700;
+  chassis.drive_distance(-25, 0, 6, 1.5);
   chassis.set_coordinates(chassis.get_X_position(),chassis.get_Y_position(), 0);
   pneumatics.clench_v(1);
   pros::delay(50);
-  chassis.turn_to_point(16,-51);
-  chassis.drive_to_point(16,-51);
+  chassis.turn_to_point(27,-51);
+  chassis.drive_to_point(27,-51,6,1.8);
+  pneumatics.doinker_right_v(1);
+  pros::delay(100);
+  chassis.turn_to_point(26.5,-70);
+  chassis.drive_distance(5);
+  pneumatics.doinker_left_v(1);
+  pros::delay(100);
+  chassis.drive_timeout= 1200;
+  chassis.drive_distance(-25);
+  chassis.drive_distance(-20);
+  pros::delay(100);
+  pneumatics.doinker_left_v(0);
+  pros::delay(100);
+  chassis.turn_to_point(33.5,-52);
+  scoring_mech.intake_move(600);
+  chassis.drive_distance(20);
+  pros::delay(200);
+  pneumatics.doinker_right_v(0);
+  chassis.turn_to_point(18,-52);
+  chassis.drive_distance(15);
+  pros::delay(200);
+  chassis.turn_to_point(-24,-28);
+  chassis.drive_distance(25);
+  
   //chassis.set_coordinates();
   //pros::Task rush_helper(Scoring_Mech::rush_helper_task);
 

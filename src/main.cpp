@@ -39,7 +39,7 @@ Drive chassis(
   //If this is an encoder, enter the port as an integer. Triport A will be a "1", Triport B will be a "2", etc.
   14,
   //Input the Forward Tracker diameter (reverse it to make the direction switch):
-  -2,
+  -1.99,
   //Input Forward Tracker center distance (In.) (a positive distance corresponds to a tracker on the right side of the robot, negative is left.)
   //For a zero tracker tank drive with odom, put the positive distance from the center of the robot to the right side of the drive.
   0.9182,
@@ -97,7 +97,6 @@ void opcontrol(void) {
   while (true) {
     chassis.arcade_control();
     pros::delay(util::DELAY_TIME); 
-    
   }
 }
 
