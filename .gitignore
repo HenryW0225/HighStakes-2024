@@ -1,0 +1,15 @@
+*.o
+.vscode/c_cpp_properties.json
+.d/PID.cpp.d
+.d/autons.cpp.d
+.d/drive/drive.cpp.d
+.d/drive/pneumatics.cpp.d
+.d/main.cpp.d
+.d/odom.cpp.d
+.d/util.cpp.d
+.vscode/settings.json
+.vscode/tasks.json
+bin/cold.package.bin
+bin/cold.package.elf
+bin/hot.package.bin
+bin/hot.package.elf
