@@ -4,6 +4,8 @@
 class Scoring_Mech{
     public:
     int neutral_stake_position = 0;
+    //int neutral_stake_position = 1;
+    int about_to_score = 0;
     int current_outtaking = 0;
     pros::MotorGroup neutral_stake_mtr;
     pros::Rotation neutral_stake_rot;
@@ -15,10 +17,9 @@ class Scoring_Mech{
 
     void neutral_stake_control();
     static int neutral_stake_task();
-    //#1: Down angle #2: Loading Angle #3: Scoring position #4: idk
-    int angle_positions[4] = {35999, 33200, 23500, 12500};
-    int up_thresholds[3] = {800, 750, 750};
-    int down_thresholds[3] = {750, 750, 1500};
+    int angle_positions[4] = {36000, 33000, 19000, 11000};
+    int up_thresholds[3] = {500, 900, 750};
+    int down_thresholds[3] = {750, 500, 1500};
     int timeout = 0;
 
     void move1(double voltage);

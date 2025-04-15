@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 *.o
 .vscode/c_cpp_properties.json
 .d/PID.cpp.d
@@ -13,3 +14,30 @@ bin/cold.package.bin
 bin/cold.package.elf
 bin/hot.package.bin
 bin/hot.package.elf
+=======
+# Compiled Object files
+*.o
+*.obj
+
+# Executables
+*.bin
+*.elf
+
+# PROS
+bin/
+.vscode/
+.cache/
+compile_commands.json
+temp.log
+temp.errors
+*.ini
+.d/
+bin/drive/scoring_mech.cpp.o
+compile_commands.json
+compile_commands.json
+bin/drive/scoring_mech.cpp.o
+compile_commands.json
+>>>>>>> Stashed changes
+src/.DS_Store
+/bin
+compile_commands.json

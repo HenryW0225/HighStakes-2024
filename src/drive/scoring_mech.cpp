@@ -10,8 +10,8 @@ Scoring_Mech::Scoring_Mech(std::initializer_list<std::int8_t> neutral_stake_mtr_
 
 
 void Scoring_Mech::initialize() {
-    neutral_stake_rot.reset_position();
-    neutral_stake_rot.set_position(35999);
+    neutral_stake_rot.set_position(36000);
+    //neutral_stake_rot.set_position(33000);
     neutral_stake_mtr.move_velocity(0);
     neutral_stake_rot.set_data_rate(5);
     intake_mtr.set_encoder_units_all(pros::v5::MotorUnits::counts);
@@ -23,19 +23,6 @@ void Scoring_Mech::initialize() {
 
 void Scoring_Mech::neutral_stake_control() {
     if (master.get_digital(DIGITAL_A) && neutral_stake_position != 3) {
-        if (neutral_stake_position == 1) {
-            current_outtaking = 1;
-            intake_mtr.move_velocity(-200);
-            pros::delay(200);
-            intake_mtr.move_velocity(0);
-            current_outtaking = 0;
-            neutral_stake_mtr.move_velocity(600);
-            timeout = 0;
-            while (neutral_stake_rot.get_position() > 20000 and timeout < 3000) {
-                pros::delay(5);
-                timeout += 5;
-            }
-        }
         neutral_stake_mtr.move_velocity(600);
         timeout = 0;
         while (neutral_stake_rot.get_position() > angle_positions[neutral_stake_position + 1] + up_thresholds[neutral_stake_position] and timeout < 3000) {
@@ -44,43 +31,35 @@ void Scoring_Mech::neutral_stake_control() {
 
         }
         neutral_stake_position++;
+        neutral_stake_mtr.move_velocity(0);
+        //pros::delay(500);
+        //cout << neutral_stake_rot.get_position() << endl;
     } 
     else if (master.get_digital(DIGITAL_Y) && neutral_stake_position != 0) {
         neutral_stake_mtr.move_velocity(-600);
-        if (neutral_stake_position == 2) {
-            timeout = 0;
-            while (neutral_stake_rot.get_position() < 24000 and timeout < 3000) {
-                pros::delay(5);
-                timeout += 5;
-            }
-        }
         timeout = 0;
-        while (neutral_stake_rot.get_position() < angle_positions[neutral_stake_position - 1] - (down_thresholds[neutral_stake_position-1]+250) and timeout < 3000) {
+        while (neutral_stake_rot.get_position() < angle_positions[neutral_stake_position - 1] - down_thresholds[neutral_stake_position-1] and timeout < 3000) {
             pros::delay(5);
             timeout += 5;
         }
         neutral_stake_position--;
+        neutral_stake_mtr.move_velocity(0);
+        //pros::delay(500);
+        //cout << neutral_stake_rot.get_position() << endl;
+
     } 
     else if (master.get_digital(DIGITAL_B) && neutral_stake_position == 1) {
-        current_outtaking = 1;
+        /*current_outtaking = 1;
         intake_mtr.move_velocity(-200);
         pros::delay(200);
         intake_mtr.move_velocity(0);
-        current_outtaking = 0;
+        current_outtaking = 0;*/
         neutral_stake_mtr.move_velocity(600);
-        // Middle position, like perpendicular to the ground ANGLE
-        while (neutral_stake_rot.get_position() > 24000) {
+        while (neutral_stake_rot.get_position() > 26000) {
             pros::delay(5);
         } 
+        about_to_score = 1;
     }
-    /*else if (master.get_digital(DIGITAL_UP)) {
-        if (neutral_stake_rot.get_angle() < 15000 or neutral_stake_rot.get_angle() > 24000) {
-            neutral_stake_mtr.move_velocity(600);
-        }
-
-    } else if (master.get_digital(DIGITAL_DOWN)) {
-        neutral_stake_mtr.move_velocity(-600);
-    }*/
     else {
         neutral_stake_mtr.move_velocity(0);
     }
