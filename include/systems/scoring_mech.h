@@ -25,6 +25,7 @@ class Scoring_Mech{
     void move1(double voltage);
     void set_brake_mode(char brake_type);
     void set_up();
+    void score();
 
     void intake_control();
     static int intake_task();

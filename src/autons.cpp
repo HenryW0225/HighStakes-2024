@@ -3,13 +3,13 @@
 void default_constants(){
   // Each constant set is in the form of (maxVoltage, kP, kI, kD, startI).
   chassis.set_drive_constants(14, 0.6, 0, 0.5, 0);
-  chassis.set_heading_constants(2, 0.25, 0, 0, 0); //was 6 0.4 0 1 0
+  chassis.set_heading_constants(1, 0.25, 0, 0, 0); //was 6 0.4 0 1 0
   chassis.set_turn_constants(14, .225, 0, 1, 0);
   chassis.set_swing_constants(14, 0.10, .005, 2.8, 15);
 
   // Each exit condition set is in the form (settle_error, settle_time, timeout).
 
-  chassis.set_drive_exit_conditions(2, 100, 3500);
+  chassis.set_drive_exit_conditions(2, 100, 3000);
   chassis.set_turn_exit_conditions(2.5, 50, 2500);
   chassis.set_swing_exit_conditions(2, 50, 2000);
 }
@@ -437,14 +437,25 @@ void redLeftElim(){
 void redRightElim(){
   default_constants();
   chassis.set_coordinates(0, 0, 0);
-  chassis.drive_to_point(0, 96, 14, 2);
-  chassis.turn_to_point(96, 96, 0, 14);
-  chassis.drive_to_point(96, 96, 14, 2);
-  chassis.drive_to_point(0, 96, 14, 2);
-  chassis.turn_to_point(0, 192, 0, 14);
-  chassis.drive_to_point(0, 0, 14, 2);
+  scoring_mech.intake_move(600);
+  chassis.turn_to_point(-24, 0); 
+  scoring_mech.set_up();
+  chassis.drive_to_point(-24, 0);
+  chassis.turn_to_point(-48, 48);
+  chassis.drive_to_point(-48, 48);
+  chassis.turn_to_point(-72, 48);
+  chassis.drive_to_point(-72, 48, 4, 1, 1.5, 100, 1500);
+  scoring_mech.intake_move(-100);
+  pros::delay(100);
+  scoring_mech.intake_move(0);
+  scoring_mech.score();
+  //chassis.turn_to_point(96, 96, 0, 14);
+  //chassis.drive_to_point(96, 96, 14, 1);
+  //chassis.drive_to_point(0, 96, 14, 1);
+  //chassis.turn_to_point(0, 192, 0, 14);
+  //chassis.drive_to_point(0, 0, 14, 1);
   //pros::Task rush_task(Scoring_Mech::rush_helper);
-  chassis.drive_distance(25);
+  //chassis.drive_distance(25);
 }
 
 

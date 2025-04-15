@@ -95,8 +95,19 @@ void Scoring_Mech::set_brake_mode(char brake_type) {
 }
 
 void Scoring_Mech::set_up() {
+    neutral_stake_mtr.move_velocity(600);
+    while (neutral_stake_rot.get_position() > angle_positions[1] + up_thresholds[0]) {
+        pros::delay(5);
+    }
     neutral_stake_mtr.move_velocity(0);
-    set_brake_mode('H');
+}
+
+void Scoring_Mech::score() {
+    neutral_stake_mtr.move_velocity(600);
+    while(neutral_stake_rot.get_position() > angle_positions[2] + up_thresholds[1]) {
+        pros::delay(5);
+    }
+    neutral_stake_mtr.move_velocity(0);
 }
 
 

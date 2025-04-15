@@ -463,13 +463,13 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
     
     float heading_output = headingPID.compute(heading_error);
     //cout << heading_error << " " << heading_output << endl;
-    if (drive_error < drive_settle_error*2) { 
+    if (drive_error < drive_settle_error*5) { 
       heading_output = 0; 
     }
 
     drive_output = clamp(drive_output, -fabs(heading_scale_factor)-drive_max_voltage, fabs(heading_scale_factor)+drive_max_voltage);
     heading_output = clamp(heading_output, -heading_max_voltage, heading_max_voltage);
-    cout << heading_error << " " << drive_output + heading_output << " " << drive_output - heading_output <<  endl;
+    //cout << heading_error << " " << drive_output + heading_output << " " << drive_output - heading_output <<  endl;
     drive_with_voltage(drive_output + heading_output, drive_output - heading_output);
     pros::Task::delay(5);
   }
