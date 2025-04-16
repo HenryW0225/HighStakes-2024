@@ -147,8 +147,8 @@ void Drive::reset_gyro() {
 void Drive::drive_with_voltage(float leftVoltage, float rightVoltage){
   //cout << chassis.get_absolute_heading() << " " << R_SidewaysTracker.get_position() << " " <<  R_ForwardTracker.get_position() << endl;
   if (fabs(leftVoltage) < 0.1 && fabs(rightVoltage) < 0.1) return;
-  DriveL.move_voltage(leftVoltage * 1000);
-  DriveR.move_voltage(rightVoltage * 1000);
+  DriveL.move_voltage(leftVoltage*1000);
+  DriveR.move_voltage(rightVoltage*1000);
   /*while (chassis.get_absolute_heading() > 270 || chassis.get_absolute_heading() < 10) {
     DriveL.move_voltage(leftVoltage * 1000);
     DriveR.move_voltage(rightVoltage * 1000);
@@ -445,7 +445,7 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
   /*set_brake_mode('C');
   while (true) {
     float heading_error = reduce_negative_180_to_180(to_deg(atan2(X_position-get_X_position(),Y_position-get_Y_position()))-get_absolute_heading());
-    cout << cos(to_rad(heading_error)) << " "  << headingPID.compute(heading_error) << endl;
+    cout << heading_error << " " << cos(to_rad(heading_error)) << " "  << headingPID.compute(heading_error) << endl;
     pros::delay(500);
   }*/
   
@@ -459,11 +459,11 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
     float heading_scale_factor = cos(to_rad(heading_error));
     drive_output*=heading_scale_factor;
 
-    //heading_error = reduce_negative_90_to_90(heading_error);
+    heading_error = reduce_negative_90_to_90(heading_error);
     
     float heading_output = headingPID.compute(heading_error);
     //cout << heading_error << " " << heading_output << endl;
-    if (drive_error < drive_settle_error*5) { 
+    if (drive_error < drive_settle_error*2) { 
       heading_output = 0; 
     }
 
@@ -471,7 +471,7 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
     heading_output = clamp(heading_output, -heading_max_voltage, heading_max_voltage);
     //cout << heading_error << " " << drive_output + heading_output << " " << drive_output - heading_output <<  endl;
     drive_with_voltage(drive_output + heading_output, drive_output - heading_output);
-    pros::Task::delay(5);
+    pros::Task::delay(10);
   }
   desired_heading = get_absolute_heading();
   DriveR.set_brake_mode(MOTOR_BRAKE_HOLD);
@@ -569,10 +569,31 @@ int Drive::position_track_task(){
 
 void Drive::calculate() {
   while (true) {
-    /*if (master.get_digital(DIGITAL_LEFT)) {
-      cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << endl;
-    }*/
+      //cout << chassis.get_X_position();
+      string x_str = std::to_string(chassis.get_X_position());
+      string y_str = std::to_string(chassis.get_Y_position());
+      string heading_str = std::to_string(chassis.get_absolute_heading());
+      pros::screen::draw_rect(0, 0, 480, 240);
+      pros::screen::set_pen(pros::Color::white);
+      pros::screen::print(TEXT_LARGE, 50, 50, x_str.c_str());
+      pros::screen::print(TEXT_LARGE, 50, 100, y_str.c_str());
+      pros::screen::print(TEXT_LARGE, 50, 150, heading_str.c_str()); 
+      pros::delay(1000);
+  }
+  /*while (true) {
+    if (master.get_digital(DIGITAL_LEFT)) {
+      printf("X: %f Y: %f Heading: %f\n", chassis.get_X_position(), chassis.get_Y_position(), chassis.get_absolute_heading());
+      string x_str = std::to_string(chassis.get_X_position());
+      string y_str = std::to_string(chassis.get_Y_position());
+      string heading_str = std::to_string(chassis.get_absolute_heading());
+      pros::screen::draw_rect(0,0,480,240);
+      pros::screen::set_pen(pros::Color::white);
+      pros::screen::print(TEXT_LARGE, 50, 50, x_str.c_str());
+      pros::screen::print(TEXT_LARGE, 50, 125, y_str.c_str());
+      pros::screen::print(TEXT_LARGE, 50, 175, heading_str.c_str()); 
+      pros::delay(500);
+    }
     cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << endl;
     pros::delay(500);
-  } 
+  } */
 }

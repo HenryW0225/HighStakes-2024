@@ -4,14 +4,15 @@
       "name": "PROS Project",
       "includePath": [
         "${workspaceFolder}/**",
-        "/Users/pathu/Downloads/HighStakes-2024/include"
+        "/Users/pathu/Downloads/HighStakes-2024/include",
+        "/Users/henryw/Documents/GitHub/HighStakes/HighStakes-2024/include"
       ],
       "defines": [
         "_DEBUG",
         "UNICODE",
         "_UNICODE"
       ],
-      "compilerPath": "/Users/pathu/Library/Application Support/Code/User/globalStorage/sigbots.pros/install/pros-toolchain-macos/bin/arm-none-eabi-g++",
+      "compilerPath": "/Users/henryw/Library/Application Support/Code/User/globalStorage/sigbots.pros/install/pros-toolchain-macos/bin/arm-none-eabi-g++",
       "cStandard": "gnu11",
       "cppStandard": "gnu++20",
       "intelliSenseMode": "gcc-arm",
@@ -20,7 +21,7 @@
       ],
       "browse": {
         "path": [
-          "/Users/pathu/Downloads/HighStakes-2024"
+          "/Users/henryw/Documents/GitHub/HighStakes/HighStakes-2024"
         ],
         "limitSymbolsToIncludedHeaders": true,
         "databaseFilename": ""

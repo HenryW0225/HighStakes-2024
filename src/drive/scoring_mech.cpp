@@ -231,15 +231,18 @@ int Scoring_Mech::intake_detector_task() {
     return 1;
 }
 
-/*void Scoring_Mech::rush_helper() {
-    scoring_mech.move2(400);
-    pros::delay(200);
+void Scoring_Mech::rush_helper() {
+    scoring_mech.move1(600);
+    pros::delay(100);
     scoring_mech.intake_move(600);
-    pros::delay(200);
-    scoring_mech.move2(0);
+    pros::delay(150);
+    scoring_mech.move1(0);
+    pros::delay(500);
+    pneumatics.doinker_left_v(1);
+    scoring_mech.intake_move(0);
 }
 
 int Scoring_Mech::rush_helper_task() {
     scoring_mech.rush_helper();
     return 1;
-}*/
+}

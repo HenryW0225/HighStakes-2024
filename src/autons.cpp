@@ -2,14 +2,14 @@
 
 void default_constants(){
   // Each constant set is in the form of (maxVoltage, kP, kI, kD, startI).
-  chassis.set_drive_constants(14, 0.6, 0, 0.5, 0);
-  chassis.set_heading_constants(1, 0.25, 0, 0, 0); //was 6 0.4 0 1 0
-  chassis.set_turn_constants(14, .225, 0, 1, 0);
-  chassis.set_swing_constants(14, 0.10, .005, 2.8, 15);
+  chassis.set_drive_constants(10.5, 0.515, 0, 0.5, 0);
+  chassis.set_heading_constants(1, 0.65, 0, 0, 0); //was 6 0.4 0 1 0
+  chassis.set_turn_constants(10.5, .225, 0, 1, 0);
+  chassis.set_swing_constants(10.5, 0.10, .005, 2.8, 15);
 
   // Each exit condition set is in the form (settle_error, settle_time, timeout).
 
-  chassis.set_drive_exit_conditions(2, 100, 3000);
+  chassis.set_drive_exit_conditions(2, 100, 5000);
   chassis.set_turn_exit_conditions(2.5, 50, 2500);
   chassis.set_swing_exit_conditions(2, 50, 2000);
 }
@@ -271,17 +271,31 @@ void testH() {
   chassis.drive_to_point(0, 0, 8, 0, 1, 50, 2500);*/
   //pros::delay(1000);
   //chassis.drive_to_point(24, 24);
+
+  /*scoring_mech.intake_move(600);
+  chassis.turn_to_point(-24, 0); 
+  scoring_mech.set_up();
+  chassis.drive_to_point(-24, 0);
+  chassis.turn_to_point(-48, 48);
+  chassis.drive_to_point(-48, 48);
+  chassis.turn_to_point(-72, 48);
+  chassis.drive_to_point(-72, 48, 4, 1, 1.5, 100, 1500);
+  scoring_mech.intake_move(-100);
+  pros::delay(100);
+  scoring_mech.intake_move(0);
+  scoring_mech.score();*/
+  /*chassis.drive_to_point(0, 96, 10.5, 1.5);
+  chassis.turn_to_point(96, 96, 0, 11);
+  chassis.drive_to_point(96, 96, 10.5, 1.5);
+  chassis.drive_to_point(0, 96, 10.5, 1.5);
+  chassis.turn_to_point(0, 192, 0, 11);
+  chassis.drive_to_point(0, 0, 10.5, 1.5);*/
 }
 
 void auton_setup() {
-  //std::cout << "We are in auton setup" << std::endl;
-  //redLeftQual
-
-  //calculate position
   odom_constants();
   chassis.set_brake_mode('C');
   chassis.set_coordinates(0, 0, 0);
-  //std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.Gyro.get_heading() << std::endl;
   pros::delay(500);
   chassis.calculate();
 
@@ -435,27 +449,26 @@ void redLeftElim(){
 
 
 void redRightElim(){
-  default_constants();
+  /*default_constants();
   chassis.set_coordinates(0, 0, 0);
-  scoring_mech.intake_move(600);
-  chassis.turn_to_point(-24, 0); 
-  scoring_mech.set_up();
-  chassis.drive_to_point(-24, 0);
-  chassis.turn_to_point(-48, 48);
-  chassis.drive_to_point(-48, 48);
-  chassis.turn_to_point(-72, 48);
-  chassis.drive_to_point(-72, 48, 4, 1, 1.5, 100, 1500);
-  scoring_mech.intake_move(-100);
-  pros::delay(100);
-  scoring_mech.intake_move(0);
-  scoring_mech.score();
-  //chassis.turn_to_point(96, 96, 0, 14);
-  //chassis.drive_to_point(96, 96, 14, 1);
-  //chassis.drive_to_point(0, 96, 14, 1);
-  //chassis.turn_to_point(0, 192, 0, 14);
-  //chassis.drive_to_point(0, 0, 14, 1);
-  //pros::Task rush_task(Scoring_Mech::rush_helper);
-  //chassis.drive_distance(25);
+  pros::delay(500);
+  chassis.turn_to_point(12, -2.493, 0, 5, 0.5, 250, 3000);
+  pros::delay(500);
+  chassis.drive_to_point(12, -2.493, 5, 0, 0.5, 250, 3000);
+  pros::delay(500);
+  chassis.turn_to_angle(17.488, 5);*/
+  default_constants();
+  chassis.set_coordinates(11.5, -2.493, 18.522);
+  pros::Task rush_task(Scoring_Mech::rush_helper_task);
+  chassis.drive_to_point(22, 28.5, 12, 0, 1, 50, 2500);
+  chassis.drive_to_point(18, 24);
+  pneumatics.doinker_left_v(0);
+  chassis.turn_to_point(13, -2);
+  chassis.drive_to_point(22, 28.5);
+  pros::delay(50);
+  pneumatics.clench_v(1);
+  pros::delay(150);
+  chassis.turn_to_point(0, 72);
 }
 
 
