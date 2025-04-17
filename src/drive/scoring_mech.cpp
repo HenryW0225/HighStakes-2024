@@ -104,7 +104,7 @@ void Scoring_Mech::set_up() {
 
 void Scoring_Mech::score() {
     neutral_stake_mtr.move_velocity(600);
-    while(neutral_stake_rot.get_position() > angle_positions[2] + up_thresholds[1]) {
+    while(neutral_stake_rot.get_position() > angle_positions[2] + up_thresholds[1]+ 7250) {
         pros::delay(5);
     }
     neutral_stake_mtr.move_velocity(0);
@@ -232,14 +232,14 @@ int Scoring_Mech::intake_detector_task() {
 }
 
 void Scoring_Mech::rush_helper() {
-    scoring_mech.move1(600);
+    scoring_mech.move1(75);
     pros::delay(100);
     scoring_mech.intake_move(600);
-    pros::delay(150);
+    pros::delay(375);
     scoring_mech.move1(0);
-    pros::delay(500);
-    pneumatics.doinker_left_v(1);
-    scoring_mech.intake_move(0);
+    pros::delay(250);
+    pneumatics.doinker_right_v(1);
+    scoring_mech.intake_move(10);
 }
 
 int Scoring_Mech::rush_helper_task() {

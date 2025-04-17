@@ -478,7 +478,7 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
   DriveR.brake();
   DriveL.set_brake_mode(MOTOR_BRAKE_HOLD);
   DriveL.brake();
-  pros::delay(500);
+  //pros::delay(500);
   std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
 }
 
@@ -508,7 +508,7 @@ void Drive::turn_to_point(float X_position, float Y_position, float extra_angle_
   DriveL.brake();
   DriveR.set_brake_mode(MOTOR_BRAKE_HOLD);
   DriveR.brake();
-  pros::delay(500);
+  //pros::delay(500);
   std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
 }
 

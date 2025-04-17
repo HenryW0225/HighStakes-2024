@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "redRush",
+    "project_name": "blueRush ",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -256,7 +256,7 @@
     },
     "upload_options": {
       "description": "Coming Soon",
-      "slot": 2
+      "slot": 4
     },
     "use_early_access": false
   }
