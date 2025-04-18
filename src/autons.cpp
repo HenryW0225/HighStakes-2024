@@ -403,13 +403,56 @@ void redRightQual(){
 }
 
 void redLeftElim(){
-  odom_constants();
-  chassis.set_coordinates(11, -14.5, 121.326);
+  /*default_constants();
+  chassis.set_coordinates(0, 0, 0);
+  pros::delay(500);
+  chassis.turn_to_point(14.5, -5.5, 0, 6, 0.5, 250, 3000);
+  pros::delay(500);
+  chassis.drive_to_point(14.5, -5.5, 6, 0, 0.5, 250, 3000);
+  pros::delay(500);
+  chassis.turn_to_angle(149, 5);*/
+
+  default_constants();
+  chassis.set_coordinates(14.088, -4.959, 148.533);
   scoring_mech.move1(600);
-  pros::delay(600);
+  chassis.drive_to_point(17, -10, 8, 0, 1.75, 50, 1000);
+  pros::delay(25);
   scoring_mech.move1(0);
   scoring_mech.set_brake_mode('C');
-  chassis.drive_to_point(5.9, -12, 13, 0, 1, 50, 450);
+  chassis.drive_to_point(0, 22, 6, 1, 2.5, 50, 1000);
+  chassis.drive_distance(-3, 1);
+  scoring_mech.move1(-600);
+  pneumatics.clench_v(1);
+  pros::delay(100);
+  chassis.turn_to_point(-24, 66);
+  scoring_mech.move1(0);
+  //scoring_mode.set_brake_mode('H');
+  scoring_mech.intake_move(600);
+  chassis.drive_to_point(-35, 38, 5.5, 1.65, 5.75, 50, 2000, 0.515, 0, 0.5, 0, 0.35, 0, 0, 0);
+  pros::delay(100);
+  chassis.drive_to_point(-12, 24, 6, 2, 2.5, 50, 650);
+  chassis.turn_to_point(-20, 24);
+  chassis.drive_to_point(-20, 24, 10, 0);
+  chassis.turn_to_point(-33, -9);
+  chassis.drive_to_point(-33, -9, 12, 0, 1.5, 50, 1200);
+  chassis.turn_to_point(-48, -24);
+  chassis.drive_to_point(-40, -16, 3, 0, 2.5, 50, 750);
+  pros::delay(50);
+  chassis.drive_to_point(-30, -6, 4, 0);
+  pros::delay(100);
+  chassis.drive_to_point(-34, -12, 8, 0);
+  chassis.drive_to_point(-24, 0, 12, 0);
+  chassis.turn_to_point(24, 0);
+  chassis.drive_to_point(24, 0, 8.5, 0.5);
+  pros::delay(200);
+  chassis.drive_to_point(72, 0, 10.5, 0.5);
+  pros::delay(200);
+  chassis.turn_to_point(48, 24);
+
+  
+
+
+  /*chassis.drive_to_point(5.9, -12, 13, 0, 1, 50, 450);
   scoring_mech.move1(-600);
   chassis.turn_to_point(13.5, -36, 0, 12, 1, 50, 650);
   chassis.drive_to_point(2, 15, 14, 0, 1, 75, 375);
@@ -444,7 +487,7 @@ void redLeftElim(){
   chassis.turn_to_point(21, 0, 1, 14, 1, 50, 600);
   chassis.drive_to_point(21, 0, 3.5, 0, 1, 50, 650);
   chassis.set_brake_mode('C');
-  chassis.drive_to_point(72, 0, 7, 0);
+  chassis.drive_to_point(72, 0, 7, 0);*/
 }
 
 
