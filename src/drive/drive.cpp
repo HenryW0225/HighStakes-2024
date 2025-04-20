@@ -217,6 +217,11 @@ void Drive::turn_to_angle(float angle, float turn_max_voltage){
 }
 
 void Drive::turn_to_angle(float angle, float turn_max_voltage, float turn_settle_error, float turn_settle_time, float turn_timeout, float turn_kp, float turn_ki, float turn_kd, float turn_starti){
+<<<<<<< Updated upstream
+=======
+  cout << chassis.get_absolute_heading() << " " << R_ForwardTracker.get_position() << " " << R_SidewaysTracker.get_position() << endl;
+  //pros::delay(500);
+>>>>>>> Stashed changes
   desired_heading = angle;
   // Desired heading carries over the angle from one movement to another. That way, if the robot doesn't
   // finish a turn movement, it will still drive at the angle that was specified in the turn movement.
@@ -232,6 +237,11 @@ void Drive::turn_to_angle(float angle, float turn_max_voltage, float turn_settle
   }
   DriveL.brake();
   DriveR.brake();
+<<<<<<< Updated upstream
+=======
+  //pros::delay(500);
+  cout << chassis.get_absolute_heading() << " " << R_ForwardTracker.get_position() << " " << R_SidewaysTracker.get_position() << endl;
+>>>>>>> Stashed changes
 }
 
 void Drive::drive_distance(float distance){
@@ -456,6 +466,10 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
   DriveR.brake();
   DriveL.set_brake_mode(MOTOR_BRAKE_HOLD);
   DriveL.brake();
+<<<<<<< Updated upstream
+=======
+  //pros::delay(500);
+>>>>>>> Stashed changes
   std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
 }
 
@@ -488,6 +502,10 @@ void Drive::turn_to_point(float X_position, float Y_position, float extra_angle_
   DriveL.brake();
   DriveR.set_brake_mode(MOTOR_BRAKE_HOLD);
   DriveR.brake();
+<<<<<<< Updated upstream
+=======
+  //pros::delay(500);
+>>>>>>> Stashed changes
   std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
 }
 

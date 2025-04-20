@@ -28,4 +28,11 @@ void blueRightQual();
 void blueLeftQual();
 void blueRightElim();
 void blueLeftElim();
+<<<<<<< Updated upstream
 void skills();
+=======
+void skills();
+void auton_setup();
+void test();
+void blueSWPGoal();
+>>>>>>> Stashed changes

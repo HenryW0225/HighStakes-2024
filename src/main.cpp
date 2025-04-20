@@ -46,9 +46,18 @@ Drive chassis(
   2.6
 );
 
+<<<<<<< Updated upstream
 Neutral_Stake neutral_stake(
   {17, -10}, 
   9
+=======
+Scoring_Mech scoring_mech(
+  {19, -20},
+  16,
+  //{-9},
+  {-9, 7},
+  17
+>>>>>>> Stashed changes
 );
 
 Intake intake(
@@ -68,6 +77,7 @@ void initialize() {
 	pneumatics.clench_initialize();
 	pneumatics.climb_initialize();
   pneumatics.doinker_initialize();
+<<<<<<< Updated upstream
   //pros::Task intake_task(color_sort_red);
   //pros::Task intake_task(color_sort_blue);
   
@@ -85,6 +95,12 @@ int color_sort_red() {
       } pros::delay(0.1);
     }
   }
+=======
+  //pros::Task intake_task_3(Scoring_Mech::intake_detector_task);
+  //pros::Task neutral_stake_task(Scoring_Mech::neutral_stake_stopper_task);
+  //pros::Task intake_task_1(Scoring_Mech::red_color_sort_task);
+  pros::Task intake_task_2(Scoring_Mech::blue_color_sort_task);
+>>>>>>> Stashed changes
 }
 
 int color_sort_blue() {
@@ -147,6 +163,7 @@ void competition_initialize() {
 }
 void autonomous() {
   chassis.set_brake_mode('H');
+<<<<<<< Updated upstream
   redRightQual();
   driveControl=false;
   // USED FOR COLOR SORT TESTING
@@ -165,6 +182,9 @@ void autonomous() {
     pros::screen::print(TEXT_LARGE, 50, 125, y_str.c_str());
   }
   */
+=======
+  blueSWPGoal();
+>>>>>>> Stashed changes
 }
 
 void opcontrol(void) {

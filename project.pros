@@ -1,7 +1,11 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
+<<<<<<< Updated upstream
     "project_name": "RUSH :)",
+=======
+    "project_name": "goal swp",
+>>>>>>> Stashed changes
     "target": "v5",
     "templates": {
       "kernel": {
@@ -256,7 +260,11 @@
     },
     "upload_options": {
       "description": "Coming Soon",
+<<<<<<< Updated upstream
       "slot": 5
+=======
+      "slot": 6
+>>>>>>> Stashed changes
     },
     "use_early_access": false
   }
