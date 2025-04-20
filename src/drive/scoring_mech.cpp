@@ -143,13 +143,13 @@ void Scoring_Mech::red_color_sort() {
     while (!driverControl) {
         if ((color_sensor.get_hue() <= 230 and color_sensor.get_hue() >= 210) && (color_sensor.get_saturation() <= 0.8 and color_sensor.get_saturation() >= 0.55) && color_sensor.get_proximity() >= 250) {
             current_rotation = intake_mtr.get_position();
-            while (intake_mtr.get_position() - current_rotation < 405) {
+            while (intake_mtr.get_position() - current_rotation < 440) {
                 pros::delay(5);
                 continue;
             } 
             current_outtaking = 1;
             intake_mtr.move_velocity(0);
-            pros::delay(500);
+            pros::delay(400);
             intake_mtr.move_velocity(600);
             current_outtaking = 0; 
         } 
