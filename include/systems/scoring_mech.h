@@ -3,9 +3,9 @@
 
 class Scoring_Mech{
     public:
-    int neutral_stake_position = 0;
+    //int neutral_stake_position = 0;
     //int neutral_stake_position = 1;
-    //int neutral_stake_position = 2;
+    int neutral_stake_position = 2;
     int about_to_score = 0;
     int current_outtaking = 0;
     pros::MotorGroup neutral_stake_mtr;

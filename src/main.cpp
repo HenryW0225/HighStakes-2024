@@ -53,7 +53,7 @@ Drive chassis(
 
 Scoring_Mech scoring_mech(
   {19, -20},
-  16,
+  18,
   //{-9},
   {-9, 7},
   17
@@ -82,7 +82,7 @@ void competition_initialize() {}
 
 void autonomous() {
   chassis.set_brake_mode('H');
-  redLeftElim();
+  redRightElim();
 }
 
 void opcontrol(void) {

@@ -175,19 +175,19 @@ int Scoring_Mech::red_color_sort_task() {
   
 void Scoring_Mech::blue_color_sort() {
     color_sensor.set_led_pwm(100); 
-    pros::delay(500);
+    pros::delay(250);
     color_sensor.set_integration_time(5);
     int current_rotation = 0;
     while (!driverControl) {
         if ((color_sensor.get_hue() <= 10 or color_sensor.get_hue() >= 350) && (color_sensor.get_saturation() >= 0.6) && color_sensor.get_proximity() >= 250) {
             current_rotation = intake_mtr.get_position();
-            while (intake_mtr.get_position() - current_rotation < 375) {
+            while (intake_mtr.get_position() - current_rotation < 510) {
                 pros::delay(5);
                 continue;
             } 
             current_outtaking = 1;
             intake_mtr.move_velocity(0);
-            pros::delay(500);
+            pros::delay(400);
             intake_mtr.move_velocity(600);
             current_outtaking = 0;
         } 
@@ -249,7 +249,7 @@ void Scoring_Mech::rush_helper() {
     pros::delay(375);
     scoring_mech.move1(0);
     pros::delay(250);
-    pneumatics.doinker_right_v(1);
+    pneumatics.doinker_left_v(1);
     scoring_mech.intake_move(10);
 }
 
