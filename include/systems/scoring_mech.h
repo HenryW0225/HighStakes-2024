@@ -5,6 +5,7 @@ class Scoring_Mech{
     public:
     int neutral_stake_position = 0;
     //int neutral_stake_position = 1;
+    //int neutral_stake_position = 2;
     int about_to_score = 0;
     int current_outtaking = 0;
     pros::MotorGroup neutral_stake_mtr;
@@ -24,8 +25,8 @@ class Scoring_Mech{
 
     void move1(double voltage);
     void set_brake_mode(char brake_type);
-    void set_up();
-    void score();
+    //void set_up();
+    //void score();
 
     void intake_control();
     static int intake_task();
@@ -34,6 +35,10 @@ class Scoring_Mech{
 
     static int rush_helper_task();
     void rush_helper();
+    static int neutral_stake_score_task();
+    void neutral_stake_score();
+    static int neutral_stake_setup_task();
+    void neutral_stake_setup();
     static int intake_detector_task();
     void intake_detector();
     static int neutral_stake_stopper_task();
