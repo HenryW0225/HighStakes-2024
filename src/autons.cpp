@@ -1105,3 +1105,57 @@ void blueSWPGoal(){
   chassis.drive_distance(27,14,2,50,1600,0.515,0,0.5,0);
  /**/
 }
+void redSWPGoal(){
+  default_constants();
+  chassis.set_coordinates(-14.088, -4.959, 148.533);
+  scoring_mech.move1(600);
+  chassis.drive_to_point(-17, -10, 8, 0, 1.75, 50, 1000);
+  pros::delay(70);
+  scoring_mech.move1(0);
+  chassis.drive_distance(-8,12,2,50,650,0.515,0,0.5,0);
+  chassis.turn_to_point(-27, -40,0,14,3,50,300);
+  chassis.drive_distance(-30,9,2,50,1600,0.515,0,0.5,0);
+  scoring_mech.move1(-600);
+  pneumatics.clench_v(1);
+  pros::delay(100);
+  chassis.turn_to_point(-17.2,34,0,14,3,50,500);
+  scoring_mech.move1(0);
+  chassis.drive_to_point(-17.2,34,14,0,2,50,1500);
+  pneumatics.doinker_left_v(1);
+  pros::delay(150);
+  chassis.turn_to_point(-17,48,0,14,3,50,450);
+  chassis.drive_distance(6.5,7,2,50,600,0.515,0,0.5,0);
+  pneumatics.doinker_right_v(1);
+  pros::delay(100);
+  chassis.turn_to_point(-22.5,44.5,0,14,3,50,450);
+  chassis.drive_to_point(6, 14, 12, 0, 1.75, 50, 1250);
+  pneumatics.doinker_right_v(0);
+  pneumatics.doinker_left_v(0);
+  pros::delay(100);
+  scoring_mech.intake_move(600);
+  chassis.turn_to_point(-48,40,0,14,3,50,450);
+  chassis.drive_distance(14,14,2,50,550,0.515,0,0.5,0);
+  pros::delay(790);
+  chassis.turn_to_point(2,55,0,14,2,50,400);
+  chassis.drive_distance(7,14,2,50,550,0.515,0,0.5,0);
+  pros::delay(790);
+  scoring_mech.intake_move(0);
+  chassis.turn_to_point(26,26,0,14,2,50,500);
+  pneumatics.clench_v(0);
+  scoring_mech.intake_move(600);
+  chassis.drive_to_point(26, 26, 12, 0, 1.75, 50, 1250);
+  pros::delay(75);
+  scoring_mech.intake_move(9);
+  pros::delay(75);
+  chassis.turn_to_point(20,0,0,14,2,50,450);
+  chassis.drive_distance(-17,7,2,50,1600,0.515,0,0.5,0);
+  pneumatics.clench_v(1);
+  pros::delay(100);
+  chassis.heading_max_voltage = 0;
+  scoring_mech.intake_move(600);
+  chassis.drive_distance(17,12,2,50,1200,0.515,0,0.5,0);
+  chassis.turn_to_point(-24,32,0,14,2,50,300);
+  //pros::Task neutralstake3_task(Scoring_Mech::neutral_stake3_helper_task);
+  chassis.drive_distance(27,14,2,50,1600,0.515,0,0.5,0);
+ /**/
+}
