@@ -59,9 +59,19 @@ void Scoring_Mech::neutral_stake_control() {
             pros::delay(5);
         } 
         about_to_score = 1;
+    } else if (master.get_digital(DIGITAL_DOWN)) {
+        neutral_stake_mtr.move_velocity(-600);
     }
     else {
         neutral_stake_mtr.move_velocity(0);
+    }
+
+    if (master.get_digital(DIGITAL_UP) /*and neutral_stake_rot.get_position() > 34000*/) {
+        neutral_stake_mtr.move_velocity(0);
+        pros::delay(500);
+        neutral_stake_position = 0;
+        neutral_stake_rot.set_position(36000);
+        pros::delay(500);
     }
     
 }
@@ -110,7 +120,8 @@ int Scoring_Mech::neutral_stake_setup_task() {
 void Scoring_Mech::neutral_stake_score() {
     neutral_stake_mtr.move_velocity(600);
     // + 7250
-    while(neutral_stake_rot.get_position() > angle_positions[2] + up_thresholds[1] + 1000) {
+    //+ 750
+    while(neutral_stake_rot.get_position() > angle_positions[2] + up_thresholds[2] + 7500) {
         pros::delay(5);
     }
     neutral_stake_mtr.move_velocity(0);
@@ -160,7 +171,7 @@ void Scoring_Mech::red_color_sort() {
             } 
             current_outtaking = 1;
             intake_mtr.move_velocity(0);
-            pros::delay(400);
+            pros::delay(150);
             intake_mtr.move_velocity(600);
             current_outtaking = 0; 
         } 
@@ -187,7 +198,7 @@ void Scoring_Mech::blue_color_sort() {
             } 
             current_outtaking = 1;
             intake_mtr.move_velocity(0);
-            pros::delay(400);
+            pros::delay(150);
             intake_mtr.move_velocity(600);
             current_outtaking = 0;
         } 
@@ -228,7 +239,7 @@ void Scoring_Mech::intake_detector() {
     while (!driverControl) {
         if (intake_mtr.get_target_velocity() >= 100 && intake_mtr.get_actual_velocity() <= 50) {
             target_velocity = intake_mtr.get_target_velocity();
-            intake_mtr.move_velocity(-300);
+            intake_mtr.move_velocity(-600);
             pros::delay(200);
             intake_mtr.move_velocity(target_velocity);
             pros::delay(1000);
@@ -248,8 +259,9 @@ void Scoring_Mech::rush_helper() {
     scoring_mech.intake_move(600);
     pros::delay(375);
     scoring_mech.move1(0);
-    pros::delay(250);
-    pneumatics.doinker_left_v(1);
+    pros::delay(210);
+    //pneumatics.doinker_left_v(1);
+    pneumatics.doinker_right_v(1);
     scoring_mech.intake_move(10);
 }
 

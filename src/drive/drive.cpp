@@ -569,7 +569,6 @@ int Drive::position_track_task(){
 
 void Drive::calculate() {
   while (true) {
-      //cout << chassis.get_X_position();
       string x_str = std::to_string(chassis.get_X_position());
       string y_str = std::to_string(chassis.get_Y_position());
       string heading_str = std::to_string(chassis.get_absolute_heading());
@@ -578,22 +577,6 @@ void Drive::calculate() {
       pros::screen::print(TEXT_LARGE, 50, 50, x_str.c_str());
       pros::screen::print(TEXT_LARGE, 50, 100, y_str.c_str());
       pros::screen::print(TEXT_LARGE, 50, 150, heading_str.c_str()); 
-      pros::delay(1000);
+      pros::delay(3000);
   }
-  /*while (true) {
-    if (master.get_digital(DIGITAL_LEFT)) {
-      printf("X: %f Y: %f Heading: %f\n", chassis.get_X_position(), chassis.get_Y_position(), chassis.get_absolute_heading());
-      string x_str = std::to_string(chassis.get_X_position());
-      string y_str = std::to_string(chassis.get_Y_position());
-      string heading_str = std::to_string(chassis.get_absolute_heading());
-      pros::screen::draw_rect(0,0,480,240);
-      pros::screen::set_pen(pros::Color::white);
-      pros::screen::print(TEXT_LARGE, 50, 50, x_str.c_str());
-      pros::screen::print(TEXT_LARGE, 50, 125, y_str.c_str());
-      pros::screen::print(TEXT_LARGE, 50, 175, heading_str.c_str()); 
-      pros::delay(500);
-    }
-    cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << endl;
-    pros::delay(500);
-  } */
 }

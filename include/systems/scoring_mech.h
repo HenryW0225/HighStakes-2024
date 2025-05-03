@@ -18,9 +18,9 @@ class Scoring_Mech{
 
     void neutral_stake_control();
     static int neutral_stake_task();
-    int angle_positions[4] = {36000, 33000, 19000, 11000};
+    int angle_positions[4] = {36000, 33000, 19000, 12250};
     int up_thresholds[3] = {500, 900, 750};
-    int down_thresholds[3] = {750, 500, 1500};
+    int down_thresholds[3] = {2000, 500, 1500};
     int timeout = 0;
 
     void move1(double voltage);
