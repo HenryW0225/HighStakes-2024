@@ -10,8 +10,8 @@ Scoring_Mech::Scoring_Mech(std::initializer_list<std::int8_t> neutral_stake_mtr_
 
 
 void Scoring_Mech::initialize() {
-    neutral_stake_rot.set_position(36000);
-    //neutral_stake_rot.set_position(33000);
+    //neutral_stake_rot.set_position(36000);
+    neutral_stake_rot.set_position(33000);
 
 
 
@@ -123,7 +123,7 @@ void Scoring_Mech::neutral_stake_score() {
     neutral_stake_mtr.move_velocity(600);
     // + 7250
     //+ 750
-    while(neutral_stake_rot.get_position() > angle_positions[2] + up_thresholds[2] + 5000) {
+    while(neutral_stake_rot.get_position() > angle_positions[2] + up_thresholds[2] + 750) {
         pros::delay(5);
     }
     neutral_stake_mtr.move_velocity(0);

@@ -381,7 +381,7 @@ void redRightElim(){
 
 void blueRightQual(){
   // blue SWP
-  default_constants();
+  /*default_constants();
   chassis.set_coordinates(-14.088, -4.959, 211.467);
   scoring_mech.move1(500);
   chassis.drive_to_point(-18, -11.5, 12, 0, 2.5, 50, 750);
@@ -418,11 +418,11 @@ void blueRightQual(){
   scoring_mech.intake_move(600);
   chassis.set_brake_mode('C');
   chassis.drive_to_point(-40, 30, 6.25 , 2.5);
-  scoring_mech.move1(50);
+  scoring_mech.move1(50);*/
 
 
   // blue 1+5 touch
-  /*default_constants();
+  default_constants();
   chassis.set_coordinates(-14.088, -4.959, 211.467);
   scoring_mech.move1(500);
   chassis.drive_to_point(-18, -11.5, 12, 0, 2.5, 50, 750);
@@ -458,7 +458,7 @@ void blueRightQual(){
   chassis.drive_to_point(-6, 30);
   scoring_mech.move1(50);
   pros::delay(500);
-  scoring_mech.move1(15);*/
+  scoring_mech.move1(15);
 }
 
 

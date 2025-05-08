@@ -77,7 +77,7 @@ void competition_initialize() {}
 
 void autonomous() {
   chassis.set_brake_mode('H');
-  blueLeftElim();
+  blueRightQual();
 }
 
 void opcontrol(void) {
