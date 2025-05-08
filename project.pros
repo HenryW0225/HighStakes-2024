@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "bluerush setup",
+    "project_name": "blue safe goal",
     "target": "v5",
     "templates": {
       "kernel": {

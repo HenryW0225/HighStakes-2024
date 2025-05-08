@@ -3,7 +3,6 @@
 
 //Motor Definitions
 pros::adi::DigitalOut clench('B');
-//pros::adi::DigitalOut climb('F');
 pros::adi::DigitalOut doinker_left('C');
 pros::adi::DigitalOut doinker_right('A');
 pros::Motor left_front_mtr(-1, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
@@ -17,10 +16,6 @@ pros::Motor right_back_mtr(4, pros::v5::MotorGears::blue, pros::v5::MotorUnits::
 Drive chassis( 
   //ZERO_TRACKER_NO_ODOM, ZERO_TRACKER_ODOM, TANK_ONE_ENCODER, TANK_ONE_ROTATION, TANK_TWO_ENCODER, TANK_TWO_ROTATION, HOLONOMIC_TWO_ENCODER, and HOLONOMIC_TWO_ROTATION
   TANK_TWO_ROTATION,
-  //Left Motors:
-  //{left_front_mtr.get_port(), left_back_mtr.get_port()},
-  //Right Motors:
-  //{right_front_mtr.get_port(), right_back_mtr.get_port()},
   //Left Motors:
   {left_front_mtr.get_port(), left_middle_mtr.get_port(), left_back_mtr.get_port()},
   //Right Motors:
@@ -53,15 +48,15 @@ Drive chassis(
 
 Scoring_Mech scoring_mech(
   {19, -20},
-  18,
-  //{-9},
-  {-9, 7},
+  13,
+  -9,
+  //{-9, 7},
   17
 );
 
 
 Pneumatics pneumatics(
-	{clench, doinker_left,doinker_right}
+	{clench, doinker_left, doinker_right}
 );
 
 
@@ -70,15 +65,15 @@ void initialize() {
   scoring_mech.initialize(); 
 	pneumatics.clench_initialize();
   pneumatics.doinker_initialize();
-  //pros::Task intake_task_3(Scoring_Mech::intake_detector_task);
-  //pros::Task neutral_stake_task(Scoring_Mech::neutral_stake_stopper_task);
+
+  pros::Task intake_task_3(Scoring_Mech::intake_detector_task);
   //pros::Task intake_task_1(Scoring_Mech::red_color_sort_task);
   pros::Task intake_task_2(Scoring_Mech::blue_color_sort_task);
 }
 
 
-
 void competition_initialize() {}
+
 
 void autonomous() {
   chassis.set_brake_mode('H');

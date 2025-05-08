@@ -231,7 +231,7 @@ void Drive::turn_to_angle(float angle, float turn_max_voltage){
 }
 
 void Drive::turn_to_angle(float angle, float turn_max_voltage, float turn_settle_error, float turn_settle_time, float turn_timeout, float turn_kp, float turn_ki, float turn_kd, float turn_starti){
-  cout << chassis.get_absolute_heading() << " " << R_ForwardTracker.get_position() << " " << R_SidewaysTracker.get_position() << endl;
+  //cout << chassis.get_absolute_heading() << " " << R_ForwardTracker.get_position() << " " << R_SidewaysTracker.get_position() << endl;
   pros::delay(500);
   desired_heading = angle;
   PID turnPID(reduce_negative_180_to_180(angle - get_absolute_heading()), turn_kp, turn_ki, turn_kd, turn_starti, turn_settle_error, turn_settle_time, turn_timeout);
@@ -245,7 +245,7 @@ void Drive::turn_to_angle(float angle, float turn_max_voltage, float turn_settle
   DriveL.brake();
   DriveR.brake();
   pros::delay(500);
-  cout << chassis.get_absolute_heading() << " " << R_ForwardTracker.get_position() << " " << R_SidewaysTracker.get_position() << endl;
+  //cout << chassis.get_absolute_heading() << " " << R_ForwardTracker.get_position() << " " << R_SidewaysTracker.get_position() << endl;
 }
 
 void Drive::drive_distance(float distance){
@@ -479,7 +479,7 @@ void Drive::drive_to_point(float X_position, float Y_position, float drive_max_v
   DriveL.set_brake_mode(MOTOR_BRAKE_HOLD);
   DriveL.brake();
   //pros::delay(500);
-  std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
+  //std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
 }
 
 void Drive::turn_to_point(float X_position, float Y_position){
@@ -509,7 +509,7 @@ void Drive::turn_to_point(float X_position, float Y_position, float extra_angle_
   DriveR.set_brake_mode(MOTOR_BRAKE_HOLD);
   DriveR.brake();
   //pros::delay(500);
-  std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
+  //std::cout << chassis.get_X_position() << " " << chassis.get_Y_position() << " " << chassis.get_absolute_heading() << std::endl;
 }
 
 void Drive::left_swing_to_point(float X_position, float Y_position){
@@ -569,7 +569,7 @@ int Drive::position_track_task(){
 
 void Drive::calculate() {
   while (true) {
-      string x_str = std::to_string(chassis.get_X_position());
+      /*string x_str = std::to_string(chassis.get_X_position());
       string y_str = std::to_string(chassis.get_Y_position());
       string heading_str = std::to_string(chassis.get_absolute_heading());
       pros::screen::draw_rect(0, 0, 480, 240);
@@ -577,6 +577,6 @@ void Drive::calculate() {
       pros::screen::print(TEXT_LARGE, 50, 50, x_str.c_str());
       pros::screen::print(TEXT_LARGE, 50, 100, y_str.c_str());
       pros::screen::print(TEXT_LARGE, 50, 150, heading_str.c_str()); 
-      pros::delay(3000);
+      pros::delay(3000);*/
   }
 }
