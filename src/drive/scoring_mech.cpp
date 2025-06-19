@@ -33,11 +33,6 @@ void Scoring_Mech::neutral_stake_control() {
             timeout += 5;
 
         }
-        /*neutral_stake_mtr.move_velocity(100);
-        while (neutral_stake_rot.get_position() > angle_positions[neutral_stake_position + 1] + up_thresholds[neutral_stake_position] and timeout < 3000) {
-            pros::delay(5);
-            timeout += 5;
-        }*/
         neutral_stake_position++;
         neutral_stake_mtr.move_velocity(0);
     } 
@@ -48,11 +43,6 @@ void Scoring_Mech::neutral_stake_control() {
             pros::delay(5);
             timeout += 5;
         }
-        /*neutral_stake_mtr.move_velocity(-100);
-        while (neutral_stake_rot.get_position() < angle_positions[neutral_stake_position - 1] - down_thresholds[neutral_stake_position-1] and timeout < 3000) {
-            pros::delay(5);
-            timeout += 5;
-        }*/
         neutral_stake_position--;
         neutral_stake_mtr.move_velocity(0);
     } 
@@ -225,7 +215,7 @@ void Scoring_Mech::intake_detector() {
             timeout = 0;
         }
 
-        if (timeout > 250) {
+        if (timeout > 450) {
             intake_mtr.move_velocity(-600);
             pros::delay(100);
             intake_mtr.move_velocity(600);

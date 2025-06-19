@@ -3,9 +3,9 @@
 
 class Scoring_Mech{
     public:
-    //int neutral_stake_position = 0;
+    int neutral_stake_position = 0;
     //int neutral_stake_position = 1;
-    int neutral_stake_position = 2;
+    //int neutral_stake_position = 2;
 
 
     int about_to_score = 0;

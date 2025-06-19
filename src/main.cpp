@@ -67,8 +67,8 @@ void initialize() {
   pneumatics.doinker_initialize();
 
   pros::Task intake_task_3(Scoring_Mech::intake_detector_task);
-  //pros::Task intake_task_1(Scoring_Mech::red_color_sort_task);
-  pros::Task intake_task_2(Scoring_Mech::blue_color_sort_task);
+  pros::Task intake_task_1(Scoring_Mech::red_color_sort_task);
+  //pros::Task intake_task_2(Scoring_Mech::blue_color_sort_task);
 }
 
 
@@ -77,7 +77,7 @@ void competition_initialize() {}
 
 void autonomous() {
   chassis.set_brake_mode('H');
-  blueRightQual();
+  redLeftElim();
 }
 
 void opcontrol(void) {
